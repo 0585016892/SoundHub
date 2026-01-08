@@ -1,0 +1,59 @@
+/* Container */
+.search-premium-container {
+  margin-top: 30px;
+}
+
+/* Breadcrumb */
+.sp-breadcrumb {
+  font-size: 14px;
+  color: #666;
+}
+.sp-breadcrumb a {
+  color: #007bff;
+  text-decoration: none;
+}
+.sp-breadcrumb span {
+  margin-left: 6px;
+  font-weight: 500;
+}
+
+/* Title */
+.sp-title {
+  margin-top: 8px;
+  font-weight: 700;
+  font-size: 26px;
+  color: #222;
+}
+
+
+/* Pagination (pill style) */
+.sp-pagination {
+  margin: 40px 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.sp-pagination button {
+  padding: 8px 16px;
+  border-radius: 25px;
+  border: none;
+  background: #f2f2f2;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sp-pagination button:hover {
+  background: #e0e0e0;
+}
+
+.sp-pagination button.active {
+  background: #007bff;
+  color: white;
+  font-weight: 700;
+}
+
+.sp-pagination button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

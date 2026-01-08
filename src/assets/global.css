@@ -1,0 +1,41 @@
+.nav-link {
+  font-size: 15px;
+  padding: 10px 14px !important;
+}
+
+.nav-link:hover {
+  color: #DC3545 !important;
+}
+
+header .navbar-brand:hover {
+  transform: scale(1.02);
+  transition: 0.2s;
+}
+.brand-logo .sound {
+  color: #083475; /* xanh Bootstrap */
+}
+
+.brand-logo .hub {
+  color: #fff;
+  -webkit-text-stroke: 1.5px #00000071;  /* viền xanh */
+  text-stroke: 1.5px #0d6efd;
+  margin-left: 3px;
+}
+.pagination .page-item.active .page-link {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: #fff;
+  font-weight: 600;
+}
+
+.pagination .page-link {
+  padding: 8px 14px;
+  border-radius: 6px;
+  margin: 0 3px;
+  cursor: pointer;
+}
+
+.pagination .page-item.disabled .page-link {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

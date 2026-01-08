@@ -1,13 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import './assets/global.css';
+import './assets/products.css';
+import './assets/checkout.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { CartProvider } from "./context/CartContext";
+import { UserProvider } from "./context/UserContext";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <UserProvider>
+      <CartProvider>
+        <App />
+      </CartProvider>
+    </UserProvider>
   </React.StrictMode>
 );
 
