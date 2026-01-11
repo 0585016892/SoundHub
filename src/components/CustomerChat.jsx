@@ -20,28 +20,31 @@ const CustomerChat = () => {
   }, [user]);
 
   // Socket.io
-  useEffect(() => {
-    if (!user) return;
+useEffect(() => {
+  if (!user) return;
 
+  if (!socket.connected) {
     socket.connect();
-    socket.emit("join", { userId: user.id, isAdmin: false });
-
-    socket.on("receiveMessage", ({ fromUserId, message, isAdminSender }) => {
-      if (isAdminSender) {
-        setMessages(prev => [...prev, { from: "admin", text: message }]);
-      }
+    socket.emit("join", {
+      userId: user.id,
+      isAdmin: false,
     });
+  }
 
-    socket.on("updateAdminStatus", (isOnline) => {
-      setAdminOnline(isOnline);
-    });
+  const onReceive = ({ fromUserId, message, isAdminSender }) => {
+    if (isAdminSender) {
+      setMessages(prev => [...prev, { from: "admin", text: message }]);
+    }
+  };
 
-    return () => {
-      socket.off("receiveMessage");
-      socket.off("updateAdminStatus");
-      socket.disconnect();
-    };
-  }, [user]);
+  socket.on("receiveMessage", onReceive);
+
+  return () => {
+    socket.off("receiveMessage", onReceive);
+    // ❌ KHÔNG disconnect ở đây
+  };
+}, [user]);
+
 
   const handleSend = () => {
     if (!input) return;
@@ -144,7 +147,13 @@ const CustomerChat = () => {
           placeholder="Nhập tin nhắn..."
           value={input}
           onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === "Enter" && handleSend()}
+         onKeyDown={e => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend();
+            }
+          }}
+
           style={{ borderRadius: "20px" }}
         />
         <Button
