@@ -3,7 +3,7 @@ import { useCart } from "../context/CartContext";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-const IMAGE_URL = "http://localhost:5000/uploads/products/";
+const IMAGE_URL = "http://localhost:20032/uploads/products/";
 
 const CheckoutPage = () => {
   const { cart, clearCart } = useCart();
@@ -69,7 +69,7 @@ const CheckoutPage = () => {
   const [discount, setDiscount] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/coupons")
+    fetch("http://localhost:20032/api/coupons")
       .then((res) => res.json())
       .then(setCouponList)
       .catch(() => setCouponList([]));
@@ -79,18 +79,24 @@ const CheckoutPage = () => {
   const shippingFee = subTotal >= 200000 ? 0 : 30000;
   const total = subTotal + shippingFee - discount;
 
-  const applyCouponFromSelect = (code) => {
-    setCouponCode(code);
-    const cp = couponList.data?.find((c) => c.code === code);
-    if (!cp) return setDiscount(0);
+const applyCouponFromSelect = (code) => {
+  setCouponCode(code);
 
-    let value = 0;
-    if (cp.type === "fixed") value = Number(cp.value);
-    else value = Math.round(subTotal * Number(cp.value) / 100);
+  if (!code) {
+    setDiscount(0);
+    return Swal.fire("Thông báo", "Đã bỏ mã giảm giá", "info");
+  }
 
-    setDiscount(value);
-    Swal.fire("Áp dụng thành công!", `Giảm ${value.toLocaleString()} đ`, "success");
-  };
+  const cp = couponList.data?.find((c) => c.code === code);
+  if (!cp) return setDiscount(0);
+
+  let value = 0;
+  if (cp.type === "fixed") value = Number(cp.value);
+  else value = Math.round((subTotal * Number(cp.value)) / 100);
+
+  setDiscount(value);
+  Swal.fire("Áp dụng thành công!", `Giảm ${value.toLocaleString()} đ`, "success");
+};
 
   // Payment
   const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -119,7 +125,7 @@ const CheckoutPage = () => {
       }
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/orders/add", {
+      const res = await fetch("http://localhost:20032/api/orders/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -142,9 +148,9 @@ const CheckoutPage = () => {
           })),
           subTotal,
           shippingFee,
-          discount,
+          discount: couponCode ? discount : 0,
           total,
-          coupon_code: couponCode,
+           coupon_code: couponCode || null,
           payment_method: paymentMethod,
         }),
       });

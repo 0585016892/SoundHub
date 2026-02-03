@@ -13,7 +13,7 @@ const CustomerChat = () => {
   // Load lịch sử chat khi mount
   useEffect(() => {
     if (!user) return;
-    fetch(`http://localhost:5000/api/chat/history/${user.id}`)
+    fetch(`http://localhost:20032/api/chat/history/${user.id}`)
       .then(res => res.json())
       .then(data => setMessages(data || []))
       .catch(() => setMessages([]));

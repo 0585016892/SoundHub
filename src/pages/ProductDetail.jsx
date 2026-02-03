@@ -5,7 +5,7 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { getProductDetail } from "../api/productApi";
 import { useCart } from "../context/CartContext";
 import Swal from "sweetalert2";
-const IMAGE_URL = "http://localhost:5000/uploads/products/";
+const IMAGE_URL = "http://localhost:20032/uploads/products/";
 
 const ProductDetail = () => {
   const { addToCart } = useCart();

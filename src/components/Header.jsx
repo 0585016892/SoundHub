@@ -19,7 +19,7 @@ import Logo from "../assets/logo.jpg";
 const Header = () => {
   const navigate = useNavigate();
   const { user, logout } = useUser();
-  const API_URL = "http://localhost:5000";
+  const API_URL = "http://localhost:20032";
 
   const cartCount = localStorage.getItem("cart")
     ? JSON.parse(localStorage.getItem("cart")).length
