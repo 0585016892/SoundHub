@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { FaShoppingBag, FaHome } from "react-icons/fa";
 
 const OrderSuccess = () => {
   const navigate = useNavigate();
-  const [count, setCount] = useState(3); // đếm ngược 3 giây
+  const [count, setCount] = useState(5); // Tăng lên 5 giây để khách hàng kịp "tận hưởng" visual
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCount((prev) => prev - 1);
+      setCount((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
 
     const timer = setTimeout(() => {
       navigate("/");
-    }, 3000);
+    }, 5000);
 
     return () => {
       clearInterval(interval);
@@ -21,77 +23,230 @@ const OrderSuccess = () => {
   }, [navigate]);
 
   return (
-    <div className="container py-5 d-flex justify-content-center">
-      <div
-        className="p-4 shadow-sm rounded-4 text-center"
-        style={{ maxWidth: "480px", width: "100%", background: "#fff" }}
+    <div className="order-success-wrapper">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="success-glass-card"
       >
-        {/* Animation */}
-        <div className="success-icon mb-3">
+        {/* ANIMATED CHECKMARK CONTAINER */}
+        <div className="icon-box-neon">
           <svg className="checkmark-svg" viewBox="0 0 52 52">
             <circle className="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
-            <path
+            <motion.path
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
               className="checkmark-check"
               fill="none"
               d="M14 27l7 7 16-16"
             />
           </svg>
+          <div className="glow-effect"></div>
         </div>
 
-        <h3 className="fw-bold text-success mb-2">Đặt hàng thành công!</h3>
-        <p className="text-muted mb-3">
-          Cảm ơn bạn đã mua hàng. Đơn hàng đang được xử lý.  
-          <br />Tự động chuyển về trang chủ sau <b>{count}</b> giây...
-        </p>
-
-        {/* Nút tiếp tục mua sắm */}
-        <Link
-          to="/"
-          className="btn btn-primary px-4 py-2 rounded-pill fw-semibold"
+        <motion.h2 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="success-title"
         >
-          Tiếp tục mua sắm
-        </Link>
-      </div>
+          ORDER COMPLETED
+        </motion.h2>
 
-      {/* CSS */}
+        <motion.p 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="success-message"
+        >
+          Giao dịch đã được xác nhận. <br />
+          Chào mừng bạn đến với thế giới âm thanh đỉnh cao của <span>SoundHub</span>.
+        </motion.p>
+
+        <div className="countdown-bar-container">
+          <motion.div 
+            initial={{ width: "100%" }}
+            animate={{ width: "0%" }}
+            transition={{ duration: 5, ease: "linear" }}
+            className="countdown-progress"
+          ></motion.div>
+          <span className="countdown-text">Redirecting in {count}s</span>
+        </div>
+
+        <div className="btn-group-success">
+          <Link to="/profile/orders" className="btn-outline-neon">
+            <FaShoppingBag className="me-2" /> ĐƠN HÀNG
+          </Link>
+          <Link to="/" className="btn-filled-neon">
+            <FaHome className="me-2" /> TRANG CHỦ
+          </Link>
+        </div>
+      </motion.div>
+
       <style>{`
-        .success-animation .checkmark {
-          width: 80px;
-          height: 80px;
-          display: inline-block;
-          border-radius: 50%;
+        .order-success-wrapper {
+          min-height: 100vh;
+          background: #050505;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          overflow: hidden;
           position: relative;
         }
 
-        .success-icon {
-  width: 90px;
-  height: 90px;
-  display: inline-block;
-}
+        /* Hiệu ứng hạt bụi bay lơ lửng phía sau (tùy chọn) */
+        .order-success-wrapper::before {
+          content: '';
+          position: absolute;
+          width: 300px; height: 300px;
+          background: #ff6600;
+          filter: blur(150px);
+          opacity: 0.1;
+          top: 20%; left: 10%;
+        }
 
-.checkmark-svg {
-  width: 100%;
-  height: 100%;
-  stroke: #4caf50;
-  stroke-width: 4;
-  stroke-linecap: round;
-}
+        .success-glass-card {
+          background: rgba(15, 15, 15, 0.8);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          padding: 60px 40px;
+          border-radius: 30px;
+          text-align: center;
+          max-width: 500px;
+          width: 100%;
+          box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
 
-.checkmark-circle {
-  stroke-dasharray: 166;
-  stroke-dashoffset: 166;
-  animation: stroke 0.6s ease-out forwards;
-}
+        /* Icon & Neon */
+        .icon-box-neon {
+          position: relative;
+          width: 100px; height: 100px;
+          margin: 0 auto 30px;
+        }
 
-.checkmark-check {
-  stroke-dasharray: 48;
-  stroke-dashoffset: 48;
-  animation: stroke 0.4s 0.6s ease-out forwards;
-}
+        .checkmark-svg {
+          width: 100%; height: 100%;
+          stroke: #ff6600;
+          stroke-width: 3;
+          stroke-linecap: round;
+          z-index: 2;
+          position: relative;
+        }
 
-@keyframes stroke {
-  to { stroke-dashoffset: 0; }
-}
+        .checkmark-circle {
+          stroke-dasharray: 166;
+          stroke-dashoffset: 166;
+          animation: stroke 0.6s ease-out forwards;
+        }
+
+        .glow-effect {
+          position: absolute;
+          top: 50%; left: 50%;
+          transform: translate(-50%, -50%);
+          width: 60px; height: 60px;
+          background: #ff6600;
+          filter: blur(40px);
+          opacity: 0.4;
+          animation: pulse-glow 2s infinite;
+        }
+
+        /* Typography */
+        .success-title {
+          color: #fff;
+          font-weight: 900;
+          letter-spacing: 5px;
+          font-size: 1.8rem;
+          margin-bottom: 15px;
+        }
+
+        .success-message {
+          color: #888;
+          font-size: 15px;
+          line-height: 1.6;
+          margin-bottom: 40px;
+        }
+
+        .success-message span {
+          color: #ff6600;
+          font-weight: 700;
+        }
+
+        /* Progress Bar */
+        .countdown-bar-container {
+          position: relative;
+          height: 30px;
+          background: rgba(255,255,255,0.03);
+          border-radius: 50px;
+          margin-bottom: 40px;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .countdown-progress {
+          position: absolute;
+          left: 0; top: 0; height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 102, 0, 0.2));
+        }
+
+        .countdown-text {
+          position: relative;
+          z-index: 1;
+          font-size: 11px;
+          font-weight: 800;
+          color: #444;
+          letter-spacing: 1px;
+        }
+
+        /* Buttons */
+        .btn-group-success {
+          display: flex;
+          gap: 15px;
+        }
+
+        .btn-outline-neon, .btn-filled-neon {
+          flex: 1;
+          padding: 14px;
+          border-radius: 15px;
+          font-weight: 800;
+          font-size: 13px;
+          letter-spacing: 1px;
+          text-decoration: none;
+          transition: 0.3s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .btn-outline-neon {
+          border: 1px solid #222;
+          color: #888;
+        }
+
+        .btn-outline-neon:hover {
+          border-color: #ff6600;
+          color: #ff6600;
+        }
+
+        .btn-filled-neon {
+          background: #ff6600;
+          color: #000;
+        }
+
+        .btn-filled-neon:hover {
+          background: #fff;
+          box-shadow: 0 10px 20px rgba(255,102,0,0.2);
+        }
+
+        @keyframes stroke { to { stroke-dashoffset: 0; } }
+        @keyframes pulse-glow {
+          0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+          50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.2); }
+        }
       `}</style>
     </div>
   );

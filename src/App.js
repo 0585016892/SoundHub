@@ -19,7 +19,7 @@ function App() {
   return (
     <BrowserRouter>
       <Header />
-      <main className="container main-content mt-3">
+      <main className="container-fluid main-content mt-3 p-0" >
         <ChatPage/>
         <Routes>
           <Route path="/" element={<Home />} />

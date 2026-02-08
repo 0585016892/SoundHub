@@ -1,8 +1,9 @@
 import React from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { FaFacebookF, FaPhoneAlt, FaMapMarkerAlt, FaArrowUp } from "react-icons/fa";
+import { FaFacebookF, FaPhoneAlt, FaMapMarkerAlt, FaArrowUp, FaInstagram, FaYoutube } from "react-icons/fa";
 import { SiZalo } from "react-icons/si";
 import { MdEmail } from "react-icons/md";
+import { motion } from "framer-motion";
 
 const Footer = () => {
   const scrollTop = () => {
@@ -10,138 +11,227 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-dark pt-5 pb-3 mt-5 text-light position-relative">
+    <footer className="footer-luxury-dark pt-5 pb-3">
       <Container>
-        <Row className="g-4">
-          {/* LOGO */}
-          <Col md={4}>
-            <div className="d-flex mb-2">
-              <h2 className="fw-bold text-white me-1">Sound</h2>
-              <h2 className="fw-bold" style={{ color: "#ff6b00" }}>Hub</h2>
+        <Row className="g-5">
+          {/* CỘT 1: BRAND STORY */}
+          <Col lg={4} md={12}>
+            <div className="footer-brand mb-4">
+              <h2 className="brand-text">SOUND<span className="accent">HUB</span></h2>
+              <div className="brand-line"></div>
             </div>
-            <p className="text-secondary">
-              Mang đến trải nghiệm âm thanh đỉnh cao với loa, tai nghe và phụ kiện
-              chính hãng.
+            <p className="text-dim">
+              SoundHub không chỉ bán thiết bị âm thanh, chúng tôi mang đến nghệ thuật thưởng thức âm nhạc đỉnh cao. Đối tác chiến lược của JBL, Marshall và Sony.
             </p>
+            <div className="social-glow-group mt-4">
+              <a href="#" className="social-icon"><FaFacebookF /></a>
+              <a href="#" className="social-icon"><FaInstagram /></a>
+              <a href="#" className="social-icon"><FaYoutube /></a>
+              <a href="#" className="social-icon"><SiZalo /></a>
+            </div>
           </Col>
 
-          {/* LINK NHANH */}
-          <Col md={4}>
-            <h5 className="fw-bold mb-3">Liên kết nhanh</h5>
-            <ul className="footer-links">
+          {/* CỘT 2: NAVIGATION */}
+          <Col lg={2} md={4} sm={6}>
+            <h6 className="footer-heading">KHÁM PHÁ</h6>
+            <ul className="footer-nav">
               <li><a href="/">Trang chủ</a></li>
-              <li><a href="/san-pham">Sản phẩm</a></li>
-              <li><a href="/about">Giới thiệu</a></li>
-              <li><a href="/lien-he">Liên hệ</a></li>
+              <li><a href="/san-pham">Cửa hàng</a></li>
+              <li><a href="/about">Về chúng tôi</a></li>
+              <li><a href="/tin-tuc">Tạp chí âm thanh</a></li>
             </ul>
           </Col>
 
-          {/* LIÊN HỆ */}
-          <Col md={4}>
-            <h5 className="fw-bold mb-3">Liên hệ</h5>
-            <p className="mb-1"><FaMapMarkerAlt /> Hà Nội, Việt Nam</p>
-            <p className="mb-1"><FaPhoneAlt /> 0123 456 xxx</p>
-            <p className="mb-3"><MdEmail /> tranquangvinh9969@gmail.com</p>
+          {/* CỘT 3: CHÍNH SÁCH */}
+          <Col lg={2} md={4} sm={6}>
+            <h6 className="footer-heading">HỖ TRỢ</h6>
+            <ul className="footer-nav">
+              <li><a href="/policy">Chính sách bảo hành</a></li>
+              <li><a href="/shipping">Vận chuyển</a></li>
+              <li><a href="/faq">Câu hỏi thường gặp</a></li>
+              <li><a href="/terms">Điều khoản dịch vụ</a></li>
+            </ul>
+          </Col>
 
-            <div className="d-flex">
-              <a href="https://facebook.com" className="footer-icon facebook me-2">
-                <FaFacebookF />
-              </a>
-              <a href="https://zalo.me/0123456789" className="footer-icon zalo">
-                <SiZalo />
-              </a>
+          {/* CỘT 4: CONTACT INFO */}
+          <Col lg={4} md={4}>
+            <h6 className="footer-heading">LIÊN HỆ</h6>
+            <div className="contact-box">
+              <div className="contact-item">
+                <FaMapMarkerAlt className="accent" />
+                <span>Hoàn Kiếm, Hà Nội, Việt Nam</span>
+              </div>
+              <div className="contact-item">
+                <FaPhoneAlt className="accent" />
+                <span>1900 66xx (Hotline)</span>
+              </div>
+              <div className="contact-item">
+                <MdEmail className="accent" />
+                <span>tranquangvinh9969@gmail.com</span>
+              </div>
             </div>
           </Col>
         </Row>
 
-        <hr className="border-secondary my-4" />
+        <div className="newsletter-box mt-5">
+          <Row className="align-items-center p-4 rounded-4" style={{ background: '#111', border: '1px solid #222' }}>
+            <Col lg={7}>
+              <h5 className="mb-1 text-white">Gia nhập cộng đồng Audiophile</h5>
+              <p className="text-dim mb-lg-0 small">Nhận ngay Voucher 10% cho đơn hàng đầu tiên.</p>
+            </Col>
+            <Col lg={5}>
+              <Form className="d-flex glass-form">
+                <Form.Control
+                  type="email"
+                  placeholder="Email của bạn..."
+                  className="bg-transparent border-0 text-white ps-3"
+                />
+                <Button className="btn-accent">Đăng ký</Button>
+              </Form>
+            </Col>
+          </Row>
+        </div>
 
-        {/* NEWSLETTER */}
-        <Row className="align-items-center">
-          <Col md={8}>
-            <p className="mb-2 mb-md-0">
-              📩 Đăng ký để nhận ưu đãi & sản phẩm mới nhất
-            </p>
-          </Col>
-          <Col md={4}>
-            <Form className="d-flex">
-              <Form.Control
-                type="email"
-                placeholder="Nhập email..."
-                className="me-2"
-              />
-              <Button variant="warning">Gửi</Button>
-            </Form>
-          </Col>
-        </Row>
+        <hr className="footer-divider my-4" />
 
-        <hr className="border-secondary my-3" />
-
-        <Row>
-          <Col className="text-center small text-secondary">
-            © 2026 SoundHub
-          </Col>
-        </Row>
+        <div className="footer-bottom d-flex justify-content-between align-items-center flex-wrap">
+          <p className="small text-dim mb-0">© 2026 SoundHub. Crafted with Passion.</p>
+          <div className="payment-icons">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="visa" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="mastercard" />
+          </div>
+        </div>
       </Container>
 
-      {/* BACK TO TOP */}
-      <button className="back-to-top" onClick={scrollTop}>
+      {/* NÚT BACK TO TOP */}
+      <button className="back-to-top-glow" onClick={scrollTop}>
         <FaArrowUp />
       </button>
 
-      {/* CSS */}
-      <style jsx>{`
-        .footer-links {
-          list-style: none;
-          padding: 0;
+      <style>{`
+        .footer-luxury-dark {
+          background: #050505;
+          color: #fff;
+          border-top: 1px solid #1a1a1a;
+          font-family: 'Inter', sans-serif;
         }
-        .footer-links li {
-          margin-bottom: 8px;
+        .brand-text {
+          font-weight: 900;
+          letter-spacing: -1.5px;
+          margin: 0;
         }
-        .footer-links a {
-          color: #adb5bd;
-          text-decoration: none;
-          transition: 0.3s;
-        }
-        .footer-links a:hover {
-          color: #ff6b00;
-          padding-left: 6px;
-        }
-        .footer-icon {
+        .brand-line {
           width: 40px;
-          height: 40px;
+          height: 3px;
+          background: #ff6600;
+          margin-top: 5px;
+        }
+        .accent { color: #ff6600 !important; }
+        .text-dim { color: #888; line-height: 1.6; }
+        
+        .footer-heading {
+          font-size: 13px;
+          font-weight: 800;
+          letter-spacing: 2px;
+          margin-bottom: 25px;
+          color: #fff;
+        }
+
+        .footer-nav { list-style: none; padding: 0; }
+        .footer-nav li { margin-bottom: 12px; }
+        .footer-nav a {
+          color: #666;
+          text-decoration: none;
+          font-size: 14px;
+          transition: 0.3s all;
+        }
+        .footer-nav a:hover {
+          color: #ff6600;
+          padding-left: 8px;
+        }
+
+        .contact-box {
+          background: #0a0a0a;
+          padding: 20px;
+          border-radius: 12px;
+          border: 1px solid #1a1a1a;
+        }
+        .contact-item {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          margin-bottom: 15px;
+          font-size: 14px;
+          color: #bbb;
+        }
+
+        .social-icon {
+          width: 38px;
+          height: 38px;
+          background: #111;
           border-radius: 50%;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          color: white;
-          transition: 0.3s;
+          color: #666;
+          margin-right: 12px;
+          transition: 0.4s;
+          border: 1px solid #222;
+          text-decoration: none;
         }
-        .facebook {
-          background: #3b5998;
+        .social-icon:hover {
+          background: #ff6600;
+          color: #fff;
+          box-shadow: 0 0 15px rgba(255, 102, 0, 0.4);
+          transform: translateY(-3px);
         }
-        .zalo {
-          background: #007fff;
+
+        .glass-form {
+          background: #050505;
+          border: 1px solid #333;
+          border-radius: 8px;
+          overflow: hidden;
         }
-        .footer-icon:hover {
-          transform: scale(1.1);
-        }
-        .back-to-top {
-          position: fixed;
-          bottom: 25px;
-          right: 25px;
-          width: 45px;
-          height: 45px;
-          border-radius: 50%;
+        .btn-accent {
+          background: #ff6600;
           border: none;
-          background: #ff6b00;
-          color: white;
-          cursor: pointer;
-          box-shadow: 0 5px 15px rgba(0,0,0,.3);
-          transition: 0.3s;
+          font-weight: bold;
+          padding: 8px 25px;
+          border-radius: 0;
         }
-        .back-to-top:hover {
-          transform: translateY(-5px);
+        .btn-accent:hover { background: #e65c00; }
+
+        .footer-divider { border-color: #1a1a1a; opacity: 1; }
+
+        .payment-icons img {
+          height: 20px;
+          margin-left: 15px;
+          filter: grayscale(1) brightness(0.7);
+        }
+
+        .back-to-top-glow {
+          position: fixed;
+          bottom: 30px;
+          right: 30px;
+          width: 50px;
+          height: 50px;
+          background: #111;
+          color: #ff6600;
+          border: 1px solid #ff6600;
+          border-radius: 50%;
+          cursor: pointer;
+          z-index: 1000;
+          transition: 0.4s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 0 10px rgba(255, 102, 0, 0.2);
+        }
+        .back-to-top-glow:hover {
+          background: #ff6600;
+          color: #fff;
+          box-shadow: 0 0 20px rgba(255, 102, 0, 0.6);
+          transform: scale(1.1);
         }
       `}</style>
     </footer>
