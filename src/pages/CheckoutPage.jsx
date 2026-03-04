@@ -74,18 +74,99 @@ const CheckoutPage = () => {
     Swal.fire({ title: "Đã áp dụng!", text: `Bạn được giảm ${value.toLocaleString()}đ`, icon: "success", timer: 1500, showConfirmButton: false });
   };
 
-  const submitOrder = async () => {
-    if (!customer.name || !customer.phone || !customer.ward || !customer.address) {
-      return Swal.fire("Thông tin trống", "Vui lòng hoàn tất địa chỉ giao hàng", "warning");
-    }
+const submitOrder = async () => {
+  if (!customer.name || !customer.phone || !customer.ward || !customer.address) {
+    return Swal.fire(
+      "Thiếu thông tin",
+      "Vui lòng nhập đầy đủ địa chỉ giao hàng",
+      "warning"
+    );
+  }
+
+  if (cart.length === 0) {
+    return Swal.fire("Giỏ hàng trống", "", "warning");
+  }
+
+  try {
     setLoading(true);
-    // ... Giữ nguyên logic fetch API đặt hàng của bạn ...
-    setTimeout(() => { // Giả lập thành công
-        setLoading(false);
-        clearCart();
-        navigate("/order-success");
-    }, 2000);
-  };
+
+    const orderData = {
+      customer: {
+        name: customer.name,
+        phone: customer.phone,
+        email: customer.email,
+        address: `${customer.address}, ${customer.ward}, ${customer.district}, ${customer.province}`,
+      },
+
+      items: cart.map((item) => ({
+        product_id: item.product_id,
+        variant_id: item.variant_id,
+        product_name: item.product_name,
+        color: item.color,
+        power: item.power,
+        connection_type: item.connection_type,
+        has_microphone: item.has_microphone,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+
+      subTotal: subTotal,
+      shippingFee: shippingFee,
+      discount: discount,
+      total: total,
+
+      coupon_code: couponCode || null,
+      payment_method: paymentMethod,
+      note: customer.note || "",
+    };
+
+    console.log("🚀 Gửi order:", orderData);
+
+    const res = await fetch(
+      "http://localhost:20032/api/orders/add",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message);
+    }
+
+    Swal.fire({
+      icon: "success",
+      title: "Đặt hàng thành công 🎉",
+      text: "Đơn hàng đang được xử lý",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+
+    clearCart();
+
+    navigate("/order-success", {
+      state: {
+        orderId: data.order_id,
+      },
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    Swal.fire(
+      "Lỗi đặt hàng",
+      err.message || "Không thể tạo đơn",
+      "error"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="checkout-wrapper pb-5" style={{marginTop:100}}>
