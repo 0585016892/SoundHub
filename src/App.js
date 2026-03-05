@@ -15,6 +15,7 @@ import SearchPage from "./pages/SearchPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ChatPage from "./pages/ChatPage";
+import NewsPage from "./pages/NewsPage";
 function App() {
   return (
     <BrowserRouter>
@@ -29,6 +30,7 @@ function App() {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/gioi-thieu" element={<About />} />
           <Route path="/lien-he" element={<ContactPage />} />
+          <Route path="/tin-tuc" element={<NewsPage />} />
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/tai-khoan" element={
