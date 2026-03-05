@@ -1,5 +1,5 @@
 import axios from "axios";
-const API = "http://localhost:20032/api/brands";
+const API = `${process.env.REACT_APP_API_URL}/brands`;
 
 export const getBrands = async () => {
   const res = await axios.get(API);

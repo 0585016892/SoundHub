@@ -1,5 +1,5 @@
 import axios from "axios";
-const API = "http://localhost:20032/api/category";
+const API = `${process.env.REACT_APP_API_URL}/category`;
 
 export const getCategories = async () => {
   const res = await axios.get(API);

@@ -5,12 +5,12 @@ import { motion } from "framer-motion";
 import { FaEye, FaCartPlus } from "react-icons/fa";
 
 const ProductCard = ({ item }) => {
-  const API_URL = "http://localhost:20032";
+  const WEB_URL = process.env.REACT_APP_WEB_URL;
   const [isLoaded, setIsLoaded] = useState(false);
 
   if (!item) return null;
 
-  const imageUrl = `${API_URL}/uploads/products/${item.image}`;
+  const imageUrl = `${WEB_URL}/uploads/products/${item.image}`;
   const formattedPrice = Number(item.price).toLocaleString("vi-VN");
 
   return (

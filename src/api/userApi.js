@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Base URL backend
-const API_URL = "http://localhost:20032/api"; // thay bằng URL backend của bạn
+const API_URL = `${process.env.REACT_APP_API_URL}`; // thay bằng URL backend của bạn
 
 // --- Login ---
 export const  loginApi = async ({ email, password }) => {

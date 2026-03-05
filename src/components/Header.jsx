@@ -11,7 +11,7 @@ import Logo from "../assets/logo.jpg";
 const Header = () => {
   const navigate = useNavigate();
   const { user, logout } = useUser();
-  const API_URL = "http://localhost:20032";
+  const WEB_URL = process.env.REACT_APP_WEB_URL;
 
   const [cartCount, setCartCount] = useState(0);
   const [showCategory, setShowCategory] = useState(false);
@@ -103,7 +103,7 @@ const Header = () => {
                             {categories.map((c) => (
                               <Col md={4} key={c.id} className="mb-2">
                                 <Link to={`/san-pham?category=${c.slug}`} className="mega-item">
-                                  <img src={`${API_URL}/uploads/products/${c.image}`} alt="" className="item-thumb" />
+                                  <img src={`${WEB_URL}/uploads/products/${c.image}`} alt="" className="item-thumb" />
                                   <span>{c.name}</span>
                                 </Link>
                               </Col>
@@ -136,7 +136,7 @@ const Header = () => {
                             {brands.map((b) => (
                               <Col md={3} key={b.id} className="mb-3">
                                 <Link to={`/san-pham?brand=${b.slug}`} className="mega-item brand-item">
-                                  <img src={`${API_URL}/uploads/products/${b.logo}`} alt={b.name} />
+                                  <img src={`${WEB_URL}/uploads/products/${b.logo}`} alt={b.name} />
                                 </Link>
                               </Col>
                             ))}
@@ -171,7 +171,7 @@ const Header = () => {
                 <Dropdown align="end">
                   <Dropdown.Toggle className="user-toggle bg-transparent border-0 shadow-none p-0">
                     <img 
-                      src={user.avatar ? `${API_URL}/uploads/users/${user.avatar}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png"} 
+                      src={user.avatar ? `${WEB_URL}/uploads/users/${user.avatar}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png"} 
                       alt="user" 
                       className="user-avatar" 
                     />

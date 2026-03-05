@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaPaperPlane, FaSmile } from "react-icons/fa";
 
 const CustomerChat = () => {
+  const API_URL = process.env.REACT_APP_API_URL;
   const { user } = useUser();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -14,7 +15,7 @@ const CustomerChat = () => {
   // Load lịch sử chat
   useEffect(() => {
     if (!user) return;
-    fetch(`http://localhost:20032/api/chat/history/${user.id}`)
+    fetch(`${API_URL}/chat/history/${user.id}`)
       .then(res => res.json())
       .then(data => {
         // Chuẩn hóa dữ liệu từ DB (mapping sender thành 'admin'/'user')
