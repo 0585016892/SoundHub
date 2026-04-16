@@ -6,6 +6,7 @@ import { loginApi } from "../api/userApi";
 import socket from "../utils/socket";
 import { motion } from "framer-motion";
 import { FiMail, FiLock, FiArrowRight } from "react-icons/fi";
+import { message } from "antd";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -76,7 +77,15 @@ const Login = () => {
             <Form.Group className="mb-4 input-group-custom">
               <div className="d-flex justify-content-between">
                 <label><FiLock className="me-2"/> MẬT KHẨU</label>
-                <Link to="/forgot-password" size="sm" className="forgot-link">Quên?</Link>
+                <div style={{ textAlign: "right", marginBottom: "24px" }}>
+                <Button
+                  type="link"
+                  style={{ color: "#ff6600", padding: 0 ,background: "transparent", border: "none" }}
+                  onClick={() => message.info("Quên thì chịu thôi, liên hệ admin nhé!")}
+                >
+                  Quên mật mã?
+                </Button>
+              </div>
               </div>
               <Form.Control
                 type="password"
@@ -100,9 +109,9 @@ const Login = () => {
             </Button>
           </Form>
 
-          <div className="mt-5 text-center footer-auth">
+          {/* <div className="mt-5 text-center footer-auth">
             <p>Chưa có tài khoản? <Link to="/register">Đăng ký ngay</Link></p>
-          </div>
+          </div> */}
         </motion.div>
       </Container>
 

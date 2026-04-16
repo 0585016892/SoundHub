@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { getUserOrders } from "../api/userApi"; // Giả định các API của bạn
 import { useUser } from "../context/UserContext";
 import { connectOrderSocket } from "../utils/orderSocket";
+import Logo from "../assets/logo2.png";
 
 import {
   UserOutlined,
@@ -89,13 +90,13 @@ const ProfilePage = () => {
         >
           <div className="d-flex flex-column flex-md-row align-items-center gap-3 gap-md-4 p-4 text-center text-md-start">
             <div className="avatar-wrapper">
-              <Avatar size={isMobile ? 80 : 100} src={`https://i.pravatar.cc/150?u=${user?.id}`} />
+              <Avatar size={isMobile ? 80 : 100} src={Logo} />
               <div className="online-indicator"></div>
             </div>
             <div>
               <h2 className="text-white fw-black mb-1 fs-3">{user?.name?.toUpperCase()}</h2>
               <p className="text-secondary mb-0 small"><MailOutlined className="me-2" />{user?.email}</p>
-              <Tag color="#ff6600" className="mt-2">MEMBER AUDIOPHILE</Tag>
+              <Tag color="#ff6600" className="mt-2">Khách hàng thành viên</Tag>
             </div>
           </div>
         </motion.div>

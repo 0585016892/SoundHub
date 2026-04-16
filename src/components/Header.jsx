@@ -6,7 +6,7 @@ import { RiMenu4Line } from "react-icons/ri";
 import { useUser } from "../context/UserContext";
 import { getCategories } from "../api/categoryApi";
 import { getBrands } from "../api/brandApi";
-import Logo from "../assets/logo.jpg";
+import Logo from "../assets/logo2.png";
 
 const Header = () => {
   const navigate = useNavigate();
