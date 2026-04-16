@@ -75,8 +75,8 @@ const Header = () => {
 
           {/* LOGO */}
           <Navbar.Brand as={Link} to="/" className="brand-logo d-flex align-items-center">
-            <img src={Logo} alt="SoundHub" className="logo-img me-2" />
-            <span className="fw-black tracking-tight">SOUND<span className="accent-color">HUB</span></span>
+            <img src={Logo} alt="TCD Audio" className="logo-img me-2" />
+            <span className="fw-black tracking-tight">TCD<span className="accent-color"> Audio</span></span>
           </Navbar.Brand>
 
           <Navbar.Collapse id="navbar-soundhub">
@@ -96,7 +96,7 @@ const Header = () => {
                       <Row className="py-4">
                         <Col md={3} className="border-end border-secondary">
                           <h6 className="accent-color fw-bold mb-3">DANH MỤC LOA</h6>
-                          <p className="small text-muted">Trải nghiệm âm thanh đỉnh cao từ những dòng loa tuyển chọn.</p>
+                          <p className="small " style={{color:'white'}}>Trải nghiệm âm thanh đỉnh cao từ những dòng loa tuyển chọn.</p>
                         </Col>
                         <Col md={9}>
                           <Row>
@@ -129,7 +129,7 @@ const Header = () => {
                       <Row className="py-4">
                         <Col md={3} className="border-end border-secondary">
                           <h6 className="accent-color fw-bold mb-3">NHÀ SẢN XUẤT</h6>
-                          <p className="small text-muted">Đại diện chính hãng của hơn 20 thương hiệu âm thanh toàn cầu.</p>
+                          <p className="small " style={{color:'white'}}>Đại diện chính hãng của hơn 20 thương hiệu âm thanh toàn cầu.</p>
                         </Col>
                         <Col md={9}>
                           <Row>
@@ -178,7 +178,7 @@ const Header = () => {
                   </Dropdown.Toggle>
                   <Dropdown.Menu variant="dark" className="mt-2">
                     <Dropdown.Item as={Link} to="/tai-khoan">Hồ sơ của tôi</Dropdown.Item>
-                    <Dropdown.Item as={Link} to="/don-hang">Lịch sử đơn hàng</Dropdown.Item>
+                    {/* <Dropdown.Item as={Link} to="/don-hang">Lịch sử đơn hàng</Dropdown.Item> */}
                     <Dropdown.Divider />
                     <Dropdown.Item onClick={logout} className="text-danger">Đăng xuất</Dropdown.Item>
                   </Dropdown.Menu>

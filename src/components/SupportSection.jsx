@@ -64,8 +64,8 @@ const SupportSection = () => {
                 <h2 className="display-4 fw-black text-orange mb-0">1.000.000+</h2>
                 <p className="text-secondary fw-bold">KHÁCH HÀNG TIN DÙNG</p>
                 <div className="brand-signature mt-3">
-                  <span className="text-white">Sound</span>
-                  <span className="text-orange">Hub</span>
+                  <span className="text-white">TCD</span>
+                  <span className="text-orange"> Audio</span>
                   <small className="d-block text-secondary-50">AUDIO - CINEMA - KARAOKE</small>
                 </div>
               </div>

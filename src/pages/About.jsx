@@ -28,7 +28,7 @@ const AboutPage = () => {
           transition={{ duration: 0.8 }}
           className="container text-center"
         >
-          <span className="brand-badge">SOUNDHUB STORY</span>
+          <span className="brand-badge">TCD AUDIO STORY</span>
           <h1 className="hero-title">ĐỊNH NGHĨA LẠI<br/><span className="accent">CHUẨN MỰC ÂM THANH</span></h1>
           <p className="hero-subtitle">
             Chúng tôi không chỉ bán thiết bị, chúng tôi mang đến trải nghiệm nghệ thuật 
@@ -60,7 +60,7 @@ const AboutPage = () => {
               <h6 className="accent fw-bold letter-spacing-2">TẦM NHÌN CỦA CHÚNG TÔI</h6>
               <h2 className="text-white fw-black mb-4">ÂM THANH LÀ LINH HỒN CỦA KHÔNG GIAN</h2>
               <p className="text-secondary mb-4 lh-lg">
-                Tại SoundHub, chúng tôi tin rằng mỗi nốt nhạc đều xứng đáng được tái tạo 
+                Tại TCD Audio, chúng tôi tin rằng mỗi nốt nhạc đều xứng đáng được tái tạo 
                 một cách trung thực nhất. Được thành lập từ niềm đam mê mãnh liệt của 
                 những kỹ sư âm thanh, chúng tôi đã hành trình khắp nơi để tuyển chọn 
                 những thương hiệu loa và tai nghe danh tiếng nhất thế giới.

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import Swal from "sweetalert2";
 import {
   Button,
@@ -24,13 +24,19 @@ import {
 } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
-const IMAGE_URL = "http://localhost:20032/uploads/products/";
+const IMAGE_URL = `${process.env.REACT_APP_WEB_URL}/uploads/products/`;
 
 const CartPage = () => {
+  const navigate = useNavigate();
   const { cart, updateQty, removeFromCart } = useCart();
   const [selectedItems, setSelectedItems] = useState([]);
-
-  const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+const selectedCartItems = cart.filter(item =>
+  selectedItems.includes(item.variant_id)
+);
+  const total = selectedCartItems.reduce(
+    (s, i) => s + i.price * i.quantity,
+    0
+  );
   const isAllSelected = cart.length > 0 && selectedItems.length === cart.length;
 
   const toggleSelect = (id) => {
@@ -291,11 +297,26 @@ const CartPage = () => {
                     </span>
                 </div>
 
-                <Link to="/checkout">
-                    <Button className="btn-checkout w-100 mt-4" size="large">
-                        TIẾN HÀNH THANH TOÁN
+                    <Button
+                      className="btn-checkout w-100 mt-4"
+                      size="large"
+                      disabled={selectedItems.length === 0}
+                   onClick={() => {
+                        if (selectedItems.length === 0) {
+                          Swal.fire("Vui lòng chọn sản phẩm để thanh toán");
+                          return;
+                        }
+
+                        localStorage.setItem(
+                          "checkout_items",
+                          JSON.stringify(selectedCartItems)
+                        );
+
+                        navigate("/checkout");
+                      }}
+                    >
+                      TIẾN HÀNH THANH TOÁN
                     </Button>
-                </Link>
 
                 <div className="cart-features mt-4">
                     <div className="feature-item"><TruckOutlined className="accent" /> Giao hàng nhanh 2H (Nội thành)</div>

@@ -4,9 +4,9 @@ import { getProducts } from "../api/productApi";
 import { getBrands } from "../api/brandApi";
 import { getCategories } from "../api/categoryApi";
 import ProductCard from "../components/ProductCard";
-import { Spinner, Container, Row, Col, Form, Button, Breadcrumb } from "react-bootstrap";
+import { Spinner, Container, Row, Col, Form, Button, Breadcrumb, Offcanvas } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiFilter, FiSliders, FiChevronRight, FiInbox } from "react-icons/fi";
+import { FiInbox, FiFilter, FiX } from "react-icons/fi";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 
 const Products = () => {
@@ -17,6 +17,9 @@ const Products = () => {
   const [loading, setLoading] = useState(false);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  
+  // State cho Mobile Filter
+  const [showMobileFilter, setShowMobileFilter] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -58,6 +61,7 @@ const Products = () => {
     else params.delete(key);
     params.set("page", 1);
     navigate(`/san-pham?${params.toString()}`);
+    setShowMobileFilter(false); // Đóng menu sau khi chọn trên mobile
   };
 
   const applyPriceFilter = (e) => {
@@ -67,129 +71,124 @@ const Products = () => {
     maxPrice ? params.set("max", maxPrice) : params.delete("max");
     params.set("page", 1);
     navigate(`/san-pham?${params.toString()}`);
+    setShowMobileFilter(false);
   };
+
+  // Component nội dung bộ lọc để tái sử dụng
+  const FilterContent = () => (
+    <div className="filter-sidebar">
+      <div className="filter-header d-none d-lg-flex align-items-center mb-4">
+        <HiOutlineAdjustmentsHorizontal size={24} className="accent-color me-2" />
+        <h5 className="mb-0 fw-bold">BỘ LỌC</h5>
+      </div>
+
+      <div className="filter-group mb-4">
+        <h6 className="filter-label">DANH MỤC</h6>
+        <div className="filter-list">
+           <div 
+            className={`filter-item ${!category ? 'active' : ''}`}
+            onClick={() => updateQuery("category", "")}
+           >
+             Tất cả sản phẩm
+           </div>
+           {categories.map(c => (
+             <div 
+              key={c.id} 
+              className={`filter-item ${category === c.slug ? 'active' : ''}`}
+              onClick={() => updateQuery("category", c.slug)}
+             >
+               {c.name}
+             </div>
+           ))}
+        </div>
+      </div>
+
+      <div className="filter-group mb-4">
+        <h6 className="filter-label">THƯƠNG HIỆU</h6>
+        <Form.Select 
+          className="filter-select"
+          value={brand || ""}
+          onChange={(e) => updateQuery("brand", e.target.value)}
+        >
+          <option value="">Chọn thương hiệu</option>
+          {brands.map(b => (
+            <option key={b.id} value={b.slug}>{b.name}</option>
+          ))}
+        </Form.Select>
+      </div>
+
+      <div className="filter-group">
+        <h6 className="filter-label">KHOẢNG GIÁ (VNĐ)</h6>
+        <Form onSubmit={applyPriceFilter}>
+          <div className="price-inputs d-flex gap-2 mb-2">
+            <input 
+              type="number" placeholder="Từ" className="price-input" 
+              value={minPrice} onChange={(e) => setMinPrice(e.target.value)}
+            />
+            <input 
+              type="number" placeholder="Đến" className="price-input" 
+              value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)}
+            />
+          </div>
+          <Button type="submit" className="w-100 btn-apply-filter">ÁP DỤNG</Button>
+        </Form>
+      </div>
+    </div>
+  );
 
   return (
     <div className="shop-page mt-5" style={{ background: "#050505", minHeight: "100vh", color: "#fff" }}>
       <Container className="pt-4 pb-5">
         
-        {/* HEADER & BREADCRUMB */}
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <div>
-            <Breadcrumb className="custom-breadcrumb">
-              <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/" }}>Trang chủ</Breadcrumb.Item>
-              <Breadcrumb.Item active>Cửa hàng</Breadcrumb.Item>
-            </Breadcrumb>
-            <h2 className="fw-black text-uppercase tracking-tighter">
+        {/* HEADER */}
+        <div className="mb-4">
+          <Breadcrumb className="custom-breadcrumb mb-2">
+            <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/" }}>Trang chủ</Breadcrumb.Item>
+            <Breadcrumb.Item active>Cửa hàng</Breadcrumb.Item>
+          </Breadcrumb>
+          <div className="d-flex justify-content-between align-items-end">
+            <h2 className="fw-black text-uppercase tracking-tighter mb-0 fs-3 fs-md-2">
               {category ? `Loa ${filtersData?.selected_category_name || category}` : "Tất cả thiết bị"}
             </h2>
-          </div>
-          <div className="d-none d-md-block">
-             <span className="text-secondary small">Hiển thị {products.length} kết quả</span>
+            {/* Mobile Filter Trigger */}
+            <Button 
+              className="d-lg-none btn-mobile-filter"
+              onClick={() => setShowMobileFilter(true)}
+            >
+              <FiFilter className="me-2" /> Lọc
+            </Button>
           </div>
         </div>
 
         <Row className="g-4">
-          {/* SIDEBAR FILTERS */}
-          <Col lg={3}>
-            <div className="filter-sidebar">
-              <div className="filter-header d-flex align-items-center mb-4">
-                <HiOutlineAdjustmentsHorizontal size={24} className="accent-color me-2" />
-                <h5 className="mb-0 fw-bold">BỘ LỌC</h5>
-              </div>
-
-              {/* Category Filter */}
-              <div className="filter-group mb-4">
-                <h6 className="filter-label">DANH MỤC</h6>
-                <div className="filter-list">
-                   <div 
-                    className={`filter-item ${!category ? 'active' : ''}`}
-                    onClick={() => updateQuery("category", "")}
-                   >
-                     Tất cả sản phẩm
-                   </div>
-                   {categories.map(c => (
-                     <div 
-                      key={c.id} 
-                      className={`filter-item ${category === c.slug ? 'active' : ''}`}
-                      onClick={() => updateQuery("category", c.slug)}
-                     >
-                       {c.name}
-                     </div>
-                   ))}
-                </div>
-              </div>
-
-              {/* Brand Filter */}
-              <div className="filter-group mb-4">
-                <h6 className="filter-label">THƯƠNG HIỆU</h6>
-                <Form.Select 
-                  className="filter-select"
-                  value={brand || ""}
-                  onChange={(e) => updateQuery("brand", e.target.value)}
-                >
-                  <option value="">Chọn thương hiệu</option>
-                  {brands.map(b => (
-                    <option key={b.id} value={b.slug}>{b.name}</option>
-                  ))}
-                </Form.Select>
-              </div>
-
-              {/* Price Filter */}
-              <div className="filter-group">
-                <h6 className="filter-label">KHOẢNG GIÁ (VNĐ)</h6>
-                <Form onSubmit={applyPriceFilter}>
-                  <div className="price-inputs d-flex gap-2 mb-2">
-                    <input 
-                      type="number" 
-                      placeholder="Từ" 
-                      className="price-input" 
-                      value={minPrice}
-                      onChange={(e) => setMinPrice(e.target.value)}
-                    />
-                    <input 
-                      type="number" 
-                      placeholder="Đến" 
-                      className="price-input" 
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(e.target.value)}
-                    />
-                  </div>
-                  <Button type="submit" className="w-100 btn-apply-filter">ÁP DỤNG</Button>
-                </Form>
-              </div>
-            </div>
+          {/* SIDEBAR FILTERS (DESKTOP) */}
+          <Col lg={3} className="d-none d-lg-block">
+            <FilterContent />
           </Col>
 
           {/* PRODUCT GRID */}
           <Col lg={9}>
             <AnimatePresence mode="wait">
               {loading ? (
-                <motion.div 
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  className="d-flex flex-column justify-content-center align-items-center py-5"
-                >
+                <div className="d-flex flex-column justify-content-center align-items-center py-5">
                   <Spinner animation="grow" variant="warning" />
-                  <span className="mt-3 text-secondary tracking-widest">ĐANG TẢI ÂM THANH...</span>
-                </motion.div>
+                  <span className="mt-3 text-secondary tracking-widest small">ĐANG TẢI...</span>
+                </div>
               ) : products.length === 0 ? (
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                  className="text-center py-5 empty-state"
-                >
-                  <FiInbox size={80} className="text-secondary mb-3" />
-                  <h3>Rất tiếc, chưa có sản phẩm này</h3>
-                  <p className="text-secondary">Hãy thử điều chỉnh bộ lọc để tìm thấy giai điệu phù hợp.</p>
-                  <Button variant="outline-light" onClick={() => navigate('/san-pham')}>Xóa tất cả bộ lọc</Button>
-                </motion.div>
+                <div className="text-center py-5 empty-state">
+                  <FiInbox size={60} className="text-secondary mb-3" />
+                  <h4>Không tìm thấy sản phẩm</h4>
+                  <Button variant="link" className="accent-color" onClick={() => navigate('/san-pham')}>Xóa bộ lọc</Button>
+                </div>
               ) : (
-                <Row className="g-4">
+                <Row className="g-3 g-md-4">
                   {products.map((item, index) => (
-                    <Col key={item.id} sm={6} md={4}>
+                    // xs={6} để hiển thị 2 cột trên điện thoại
+                    <Col key={item.id} xs={6} md={4}>
                       <motion.div
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: index * 0.05 }}
+                        transition={{ delay: index * 0.05 }}
                       >
                         <ProductCard item={item} />
                       </motion.div>
@@ -199,12 +198,12 @@ const Products = () => {
               )}
             </AnimatePresence>
 
-            {/* MODERN PAGINATION */}
+            {/* PAGINATION */}
             {!loading && filtersData?.totalPages > 1 && (
-              <div className="d-flex justify-content-center mt-5">
-                <div className="pagination-wrapper">
+              <div className="d-flex justify-content-center mt-5 overflow-auto pb-2">
+                <div className="pagination-wrapper flex-nowrap">
                    <button 
-                    className="p-btn" 
+                    className="p-btn d-none d-sm-flex" 
                     disabled={page === 1}
                     onClick={() => updateQuery("page", page - 1)}
                    >
@@ -220,7 +219,7 @@ const Products = () => {
                      </button>
                    ))}
                    <button 
-                    className="p-btn" 
+                    className="p-btn d-none d-sm-flex" 
                     disabled={page === filtersData.totalPages}
                     onClick={() => updateQuery("page", page + 1)}
                    >
@@ -233,43 +232,57 @@ const Products = () => {
         </Row>
       </Container>
 
+      {/* MOBILE FILTER OFFCANVAS */}
+      <Offcanvas 
+        show={showMobileFilter} 
+        onHide={() => setShowMobileFilter(false)}
+        placement="end"
+        className="bg-dark text-white mobile-filter-canvas"
+      >
+        <Offcanvas.Header closeButton closeVariant="white">
+          <Offcanvas.Title className="fw-bold">BỘ LỌC TÌM KIẾM</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <FilterContent />
+        </Offcanvas.Body>
+      </Offcanvas>
+
       <style>{`
         .accent-color { color: #ff6600; }
         .fw-black { font-weight: 900; }
-        .tracking-tighter { letter-spacing: -1.5px; }
+        .tracking-tighter { letter-spacing: -1px; }
         
-        /* Custom Breadcrumb */
-        .custom-breadcrumb .breadcrumb-item a { color: #888; text-decoration: none; font-size: 13px; }
-        .custom-breadcrumb .breadcrumb-item.active { color: #ff6600; font-size: 13px; }
-        .custom-breadcrumb .breadcrumb-item + .breadcrumb-item::before { color: #333; content: ">"; }
+        .custom-breadcrumb .breadcrumb-item a { color: #888; text-decoration: none; font-size: 12px; }
+        .custom-breadcrumb .breadcrumb-item.active { color: #ff6600; font-size: 12px; }
 
-        /* Filter Sidebar */
-        .filter-sidebar { background: #0a0a0a; padding: 25px; border-radius: 16px; border: 1px solid #1a1a1a; position: sticky; top: 100px; }
-        .filter-label { font-size: 12px; font-weight: 800; letter-spacing: 1px; color: #444; margin-bottom: 15px; }
-        
-        .filter-list { display: flex; flex-direction: column; gap: 8px; }
-        .filter-item { color: #888; font-size: 14px; cursor: pointer; transition: 0.3s; padding: 5px 0; }
-        .filter-item:hover { color: #ff6600; padding-left: 5px; }
-        .filter-item.active { color: #ff6600; font-weight: bold; }
+        /* Sidebar & Content */
+        .filter-sidebar { background: #0a0a0a; padding: 20px; border-radius: 16px; border: 1px solid #1a1a1a; position: sticky; top: 100px; }
+        .btn-mobile-filter { background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; font-size: 14px; padding: 6px 15px; }
+        .btn-mobile-filter:hover { background: #ff6600; }
 
-        .filter-select { background: #000; border: 1px solid #222; color: #fff; font-size: 14px; border-radius: 8px; padding: 10px; }
-        .filter-select:focus { background: #000; color: #fff; border-color: #ff6600; box-shadow: none; }
+        /* Filter Items */
+        .filter-label { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #444; margin-bottom: 15px; text-transform: uppercase; }
+        .filter-item { color: #888; font-size: 14px; cursor: pointer; transition: 0.2s; padding: 8px 0; border-bottom: 1px solid #111; }
+        .filter-item:hover, .filter-item.active { color: #ff6600; font-weight: bold; }
 
-        .price-input { background: #000; border: 1px solid #222; color: #fff; width: 100%; padding: 8px; font-size: 13px; border-radius: 6px; }
-        .price-input:focus { outline: none; border-color: #ff6600; }
-        .btn-apply-filter { background: #ff6600; border: none; font-weight: 800; font-size: 12px; padding: 10px; border-radius: 6px; transition: 0.3s; }
-        .btn-apply-filter:hover { background: #fff; color: #000; }
+        /* Form Controls */
+        .filter-select { background: #000; border: 1px solid #222; color: #fff; border-radius: 8px; }
+        .price-input { background: #000; border: 1px solid #222; color: #fff; width: 100%; padding: 10px; font-size: 13px; border-radius: 8px; }
+        .btn-apply-filter { background: #ff6600; border: none; font-weight: bold; padding: 12px; border-radius: 8px; }
 
         /* Pagination */
-        .pagination-wrapper { display: flex; gap: 10px; background: #0a0a0a; padding: 8px; border-radius: 50px; border: 1px solid #1a1a1a; }
-        .p-btn { background: transparent; border: none; color: #666; width: 40px; height: 40px; border-radius: 50%; font-size: 14px; font-weight: bold; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
-        .p-btn:hover { color: #ff6600; background: #151515; }
+        .pagination-wrapper { display: flex; gap: 8px; background: #0a0a0a; padding: 6px; border-radius: 50px; border: 1px solid #1a1a1a; width: fit-content; }
+        .p-btn { background: transparent; border: none; color: #666; min-width: 35px; height: 35px; border-radius: 50%; font-size: 13px; font-weight: bold; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .p-btn.active { background: #ff6600; color: #fff; }
-        .p-btn:disabled { opacity: 0.2; cursor: not-allowed; }
-        .p-btn:not(.active) { min-width: 60px; border-radius: 20px; }
+        .p-btn:disabled { opacity: 0.3; }
 
-        .empty-state h3 { font-weight: 800; color: #fff; }
-        .tracking-widest { letter-spacing: 4px; font-size: 10px; }
+        /* Mobile specific adjustments */
+        @media (max-width: 768px) {
+          .shop-page { margin-top: 20px !important; }
+          .pagination-wrapper { border-radius: 10px; gap: 4px; }
+          .p-btn { min-width: 32px; height: 32px; font-size: 12px; }
+          .mobile-filter-canvas { width: 85% !important; }
+        }
       `}</style>
     </div>
   );

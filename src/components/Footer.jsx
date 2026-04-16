@@ -17,11 +17,11 @@ const Footer = () => {
           {/* CỘT 1: BRAND STORY */}
           <Col lg={4} md={12}>
             <div className="footer-brand mb-4">
-              <h2 className="brand-text">SOUND<span className="accent">HUB</span></h2>
+              <h2 className="brand-text">TCD<span className="accent">AUDIO</span></h2>
               <div className="brand-line"></div>
             </div>
             <p className="text-dim">
-              SoundHub không chỉ bán thiết bị âm thanh, chúng tôi mang đến nghệ thuật thưởng thức âm nhạc đỉnh cao. Đối tác chiến lược của JBL, Marshall và Sony.
+              TCD Audio không chỉ bán thiết bị âm thanh, chúng tôi mang đến nghệ thuật thưởng thức âm nhạc đỉnh cao. Đối tác chiến lược của JBL, Marshall và Sony.
             </p>
             <div className="social-glow-group mt-4">
               <a href="#" className="social-icon"><FaFacebookF /></a>
@@ -59,15 +59,15 @@ const Footer = () => {
             <div className="contact-box">
               <div className="contact-item">
                 <FaMapMarkerAlt className="accent" />
-                <span>Hoàn Kiếm, Hà Nội, Việt Nam</span>
+                <span>Thanh Trì, Hà Nội, Việt Nam</span>
               </div>
               <div className="contact-item">
                 <FaPhoneAlt className="accent" />
-                <span>1900 66xx (Hotline)</span>
+                <span>0859742586 (Hotline)</span>
               </div>
               <div className="contact-item">
                 <MdEmail className="accent" />
-                <span>tranquangvinh9969@gmail.com</span>
+                <span>2121051290@student.humg.edu.vn</span>
               </div>
             </div>
           </Col>
@@ -95,7 +95,7 @@ const Footer = () => {
         <hr className="footer-divider my-4" />
 
         <div className="footer-bottom d-flex justify-content-between align-items-center flex-wrap">
-          <p className="small text-dim mb-0">© 2026 SoundHub. Crafted with Passion.</p>
+          <p className="small text-dim mb-0">© 2026 TDC Audio. Crafted with Passion.</p>
           <div className="payment-icons">
             <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="visa" />
             <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="mastercard" />

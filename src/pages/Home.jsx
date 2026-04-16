@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Badge } from "react-bootstrap";
+import { Container, Row, Col, Badge, Spinner } from "react-bootstrap";
 import { motion, useScroll, useSpring } from "framer-motion";
 import Hero from "../components/Hero";
 import ProductCard from "../components/ProductCard";
@@ -7,10 +7,10 @@ import HighlightSection from "../components/HighlightSection";
 import SupportSection from "../components/SupportSection";
 import { getHotProducts, getFeaturedProducts, getAllProducts } from "../api/productApi";
 
-// Animation variants cho Framer Motion
 const fadeInUp = {
-  initial: { y: 60, opacity: 0 },
-  animate: { y: 0, opacity: 1, transition: { duration: 0.6, ease: "easeOut" } }
+  initial: { y: 40, opacity: 0 },
+  whileInView: { y: 0, opacity: 1, transition: { duration: 0.6, ease: "easeOut" } },
+  viewport: { once: true, margin: "-50px" }
 };
 
 const Home = () => {
@@ -34,7 +34,7 @@ const Home = () => {
         setProductsHot(hot || []);
         setProductsSale(sale || []);
       } catch (err) {
-        console.error("Lỗi khi tải dữ liệu trang chủ:", err);
+        console.error("Error loading home data:", err);
       } finally {
         setLoading(false);
       }
@@ -42,52 +42,63 @@ const Home = () => {
     fetchData();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh", background: "#050505" }}>
+        <Spinner animation="border" variant="warning" />
+      </div>
+    );
+  }
+
   return (
-    <div className="home-wrapper" style={{ background: "#050505", color: "#fff", overflowX: "hidden" }}>
-      {/* Progress Bar ở trên cùng */}
-      <motion.div className="progress-bar" style={{ scaleX, position: 'fixed', top: 0, left: 0, right: 0, height: 4, background: '#ff6600', zIndex: 9999, originX: 0 }} />
+    <div className="home-wrapper">
+      {/* Progress Bar */}
+      <motion.div className="progress-bar-top" style={{ scaleX }} />
 
       {/* 1. Hero Section */}
       <Hero />
 
-      {/* 2. Banner Chạy Chữ (Marquee) - Tạo cảm giác hiện đại */}
-      <div className="marquee-section" style={{ background: "#ff6600", color: "#000", padding: "10px 0", fontWeight: "bold", overflow: "hidden", whiteSpace: "nowrap" }}>
+      {/* 2. Marquee Section - Tối ưu cho cả Mobile */}
+      <div className="marquee-container">
         <motion.div 
+          className="marquee-content"
           animate={{ x: [0, -1000] }} 
-          transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-          style={{ fontSize: '1.2rem', textTransform: 'uppercase' }}
+          transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
         >
-          FREE SHIPPING ON ORDERS OVER 5M — AUTHENTIC SOUND — SOUNDHUB PREMIUM — 24/7 SUPPORT — 
-          FREE SHIPPING ON ORDERS OVER 5M — AUTHENTIC SOUND — SOUNDHUB PREMIUM — 24/7 SUPPORT — 
+          {[1, 2, 3].map((i) => (
+            <span key={i}>
+              FREE SHIPPING OVER 5M • AUTHENTIC SOUND • TDC AUDIO PREMIUM • 24/7 SUPPORT • &nbsp;
+            </span>
+          ))}
         </motion.div>
       </div>
 
-      <Container className="py-5">
-        {/* 3. Highlight Sections (Hot & Sale) */}
-        <motion.div initial="initial" whileInView="animate" viewport={{ once: true }} variants={fadeInUp}>
+      <Container className="py-4 py-md-5">
+        {/* 3. Highlight Sections */}
+        <motion.div {...fadeInUp}>
           <HighlightSection title="SẢN PHẨM HOT" products={productsHot} />
         </motion.div>
 
-        <motion.div initial="initial" whileInView="animate" viewport={{ once: true }} variants={fadeInUp} className="mt-5">
+        <motion.div {...fadeInUp} className="mt-5">
           <HighlightSection title="SẢN PHẨM SALE" products={productsSale} />
         </motion.div>
 
-        {/* 4. Tất cả sản phẩm với Grid chuyên nghiệp */}
-        <section className="all-products-section mt-5 pt-5">
-          <div className="section-header text-center mb-5">
-            <Badge bg="secondary" className="mb-2" style={{ background: '#ff660020', color: '#ff6600' }}>DISCOVER</Badge>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-1px' }}>TẤT CẢ SẢN PHẨM</h2>
-            <div style={{ width: 60, height: 4, background: '#ff6600', margin: '20px auto' }}></div>
+        {/* 4. All Products Grid */}
+        <section className="all-products-section mt-5 pt-4 pt-md-5">
+          <div className="section-header text-center mb-4 mb-md-5">
+            <Badge className="discover-badge mb-2">DISCOVER</Badge>
+            <h2 className="section-title">TẤT CẢ SẢN PHẨM</h2>
+            <div className="title-underline"></div>
           </div>
 
-          <Row className="g-4">
+          <Row className="g-3 g-md-4">
             {products.map((product, idx) => (
-              <Col key={product.id} xs={12} sm={6} md={4} lg={3}>
+              <Col key={product.id} xs={6} md={4} lg={3}>
                 <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
+                  transition={{ delay: (idx % 4) * 0.1 }}
                 >
                   <ProductCard item={product} />
                 </motion.div>
@@ -97,31 +108,87 @@ const Home = () => {
         </section>
       </Container>
 
-      {/* 5. Support Section với nền tối giản */}
-      <div style={{ background: "#0a0a0a", borderTop: "1px solid #222" }}>
+      {/* 5. Support Section */}
+      <div className="support-wrapper">
         <Container>
           <SupportSection />
         </Container>
       </div>
 
-      {/* CSS Inline cho các hiệu ứng đặc biệt */}
       <style>{`
         .home-wrapper {
-          scroll-behavior: smooth;
+          background: #050505;
+          color: #fff;
+          overflow-x: hidden;
         }
-        .section-header h2 {
+
+        .progress-bar-top {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 3px;
+          background: #ff6600;
+          z-index: 10000;
+          origin-x: 0;
+        }
+
+        /* Marquee */
+        .marquee-container {
+          background: #ff6600;
+          color: #000;
+          padding: 8px 0;
+          font-weight: 900;
+          overflow: hidden;
+          white-space: nowrap;
+          border-y: 1px solid rgba(0,0,0,0.1);
+        }
+        .marquee-content {
+          display: inline-block;
+          font-size: clamp(0.8rem, 2vw, 1.1rem);
           text-transform: uppercase;
+          letter-spacing: 1px;
         }
-        /* Custom Hover cho Product Cards trong grid */
-        .carousel-card:hover {
-          transform: translateY(-10px);
-          transition: all 0.3s ease;
+
+        /* Section Header */
+        .section-title {
+          font-size: clamp(1.5rem, 5vw, 2.5rem);
+          font-weight: 800;
+          letter-spacing: -1px;
         }
-        /* Hiệu ứng mờ nền cho Container */
-        .container {
-          position: relative;
-          z-index: 2;
+        .discover-badge {
+          background: rgba(255, 102, 0, 0.15) !important;
+          color: #ff6600 !important;
+          font-weight: 800;
+          letter-spacing: 1px;
+          padding: 6px 12px;
         }
+        .title-underline {
+          width: 50px;
+          height: 3px;
+          background: #ff6600;
+          margin: 15px auto;
+        }
+
+        /* Support Section */
+        .support-wrapper {
+          background: #0a0a0a;
+          border-top: 1px solid #1a1a1a;
+          margin-top: 50px;
+          padding: 40px 0;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 767.98px) {
+          .py-5 { padding-top: 2rem !important; padding-bottom: 2rem !important; }
+          .g-3 { --bs-gutter-x: 0.75rem; --bs-gutter-y: 0.75rem; }
+          
+          /* Giảm bớt animation cho mobile để mượt hơn */
+          .progress-bar-top { height: 2px; }
+        }
+
+        /* Khắc phục lỗi hiển thị ngang trên Mobile */
+        body { overflow-x: hidden; width: 100%; }
       `}</style>
     </div>
   );

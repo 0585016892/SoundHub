@@ -62,7 +62,7 @@ const OrderSuccess = () => {
           className="success-message"
         >
           Giao dịch đã được xác nhận. <br />
-          Chào mừng bạn đến với thế giới âm thanh đỉnh cao của <span>SoundHub</span>.
+          Chào mừng bạn đến với thế giới âm thanh đỉnh cao của <span>TCD Audio</span>.
         </motion.p>
 
         <div className="countdown-bar-container">

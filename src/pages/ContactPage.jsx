@@ -83,7 +83,7 @@ const ContactPage = () => {
                 <div className="method-icon"><FaEnvelope /></div>
                 <div className="method-text">
                   <h6>EMAIL</h6>
-                  <p>support@soundhub.com</p>
+                  <p>support@tcdaudio.com</p>
                 </div>
               </div>
 

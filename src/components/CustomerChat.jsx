@@ -5,26 +5,26 @@ import { useUser } from "../context/UserContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaPaperPlane, FaSmile } from "react-icons/fa";
 
-const CustomerChat = () => {
+const CustomerChat = ({ onNewMessage }) => {
   const API_URL = process.env.REACT_APP_API_URL;
   const { user } = useUser();
   const [messages, setMessages] = useState([]);
+
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
-
+  const [unreadCount, setUnreadCount] = useState(0);
   // Load lịch sử chat
   useEffect(() => {
     if (!user) return;
     fetch(`${API_URL}/chat/history/${user.id}`)
       .then(res => res.json())
       .then(data => {
-        // Chuẩn hóa dữ liệu từ DB (mapping sender thành 'admin'/'user')
         const history = data.map(m => ({
-          from: m.isAdminSender ? "admin" : "user",
-          text: m.message,
+          from: m.from,
+          text: m.text,
           time: m.createdAt
         }));
-        setMessages(history || []);
+        setMessages(history);
       })
       .catch(() => setMessages([]));
   }, [user]);
@@ -40,14 +40,24 @@ const CustomerChat = () => {
 
     const onReceive = ({ fromUserId, message, isAdminSender }) => {
       if (isAdminSender) {
-        setMessages(prev => [...prev, { from: "admin", text: message, time: new Date() }]);
+        setMessages(prev => [
+          ...prev,
+          { from: "admin", text: message, time: new Date() }
+        ]);
+
+            // 👇 thêm dòng này
+        if (onNewMessage) {
+          onNewMessage();
+        }
       }
     };
 
     socket.on("receiveMessage", onReceive);
     return () => socket.off("receiveMessage", onReceive);
   }, [user]);
-
+useEffect(() => {
+  setUnreadCount(0);
+}, []);
   const handleSend = () => {
     if (!input.trim()) return;
     socket.emit("sendMessage", {
@@ -89,7 +99,7 @@ const CustomerChat = () => {
         ) : (
           <div className="empty-chat-state">
             <div className="welcome-art">🎧</div>
-            <h5>SoundHub xin chào!</h5>
+            <h5>TCD Audio xin chào!</h5>
             <p>Chúng tôi có thể giúp gì cho trải nghiệm âm nhạc của bạn?</p>
           </div>
         )}

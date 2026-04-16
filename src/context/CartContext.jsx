@@ -1,5 +1,6 @@
 // CartContext.jsx
 import React, { createContext, useContext, useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
 const CartContext = createContext();
 
@@ -12,24 +13,40 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
+const addToCart = (item) => {
+  const existing = cart.find(
+    (c) =>
+      c.product_id === item.product_id &&
+      c.variant_id === item.variant_id
+  );
 
-  const addToCart = (item) => {
-    const existing = cart.find(
-      (c) => c.product_id === item.product_id && c.variant_id === item.variant_id
-    );
-    let newCart;
-    if (existing) {
-      newCart = cart.map((c) =>
-        c.product_id === item.product_id && c.variant_id === item.variant_id
-          ? { ...c, quantity: c.quantity + item.quantity }
-          : c
-      );
-    } else {
-      newCart = [...cart, item];
+  let newCart;
+
+  if (existing) {
+    const newQty = existing.quantity + item.quantity;
+
+    if (newQty > item.stock) {
+      Swal.fire({
+        icon: "warning",
+        title: `Chỉ còn ${item.stock} sản phẩm!`,
+        background: "#111",
+        color: "#fff",
+      });
+      return;
     }
-    setCart(newCart);
-  };
 
+    newCart = cart.map((c) =>
+      c.product_id === item.product_id &&
+      c.variant_id === item.variant_id
+        ? { ...c, quantity: newQty }
+        : c
+    );
+  } else {
+    newCart = [...cart, item];
+  }
+
+  setCart(newCart);
+};
   const updateQty = (variant_id, product_id, quantity) => {
     const newCart = cart.map((c) =>
       c.product_id === product_id && c.variant_id === variant_id

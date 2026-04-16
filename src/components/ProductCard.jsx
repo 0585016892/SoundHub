@@ -60,7 +60,7 @@ const ProductCard = ({ item }) => {
             </>
           ) : (
             <>
-              <div className="brand-tag">SOUNDHUB EXCLUSIVE</div>
+              <div className="brand-tag">TCD AUDIO EXCLUSIVE</div>
               <Card.Title className="product-name">
                 <Link to={`/san-pham/${item.slug}`}>{item.name}</Link>
               </Card.Title>

@@ -56,39 +56,41 @@ const SoundNews = () => {
   ];
 
   return (
-    <div className="news-page-container" style={{ backgroundColor: "#0f0f0f", color: "#fff", padding: "120px 0 60px", minHeight: "100vh" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 20px" }}>
+    <div className="news-page-container">
+      <div className="news-content-wrapper">
         
         {/* Header Section */}
-        <Row align="bottom" justify="space-between" className="mb-5">
-          <Col>
-            <Space direction="vertical" size={0}>
-              <Text style={{ color: "#ff6600", fontWeight: 600, letterSpacing: 2 }}>MAGAZINE</Text>
-              <Title level={1} style={{ color: "#fff", margin: 0, fontSize: "3rem" }}>Tạp chí âm thanh</Title>
-            </Space>
-          </Col>
-          <Col xs={24} md={8}>
-            <Input 
-              prefix={<SearchOutlined style={{ color: "#666" }} />} 
-              placeholder="Tìm bài viết, thương hiệu..." 
-              className="search-input-dark"
-            />
-          </Col>
-        </Row>
+        <div className="news-header-section mb-4">
+          <Row gutter={[20, 20]} align="bottom">
+            <Col xs={24} lg={16}>
+              <div className="brand-label">MAGAZINE</div>
+              <Title level={1} className="main-news-title">Tạp chí âm thanh</Title>
+            </Col>
+            <Col xs={24} lg={8}>
+              <Input 
+                prefix={<SearchOutlined style={{ color: "#666" }} />} 
+                placeholder="Tìm bài viết..." 
+                className="search-input-dark"
+              />
+            </Col>
+          </Row>
+        </div>
 
-        {/* Categories Tabs */}
-        <Tabs 
-          activeKey={activeTab} 
-          onChange={setActiveTab}
-          className="soundhub-tabs"
-          items={categories.map(c => ({
-            key: c.key,
-            label: c.label
-          }))}
-        />
+        {/* Categories Tabs - Tối ưu vuốt ngang trên mobile */}
+        <div className="tabs-container mb-4">
+          <Tabs 
+            activeKey={activeTab} 
+            onChange={setActiveTab}
+            className="soundhub-tabs"
+            items={categories.map(c => ({
+              key: c.key,
+              label: c.label
+            }))}
+          />
+        </div>
 
         {/* News Content Area */}
-        <div className="mt-4" style={{ minHeight: '450px' }}>
+        <div className="news-list-area">
           <AnimatePresence mode="wait">
             {(() => {
               const filteredData = newsData.filter(
@@ -99,47 +101,49 @@ const SoundNews = () => {
                 return (
                   <motion.div
                     key={activeTab}
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
+                    exit={{ opacity: 0, y: -15 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <Row gutter={[32, 32]}>
-                      {filteredData.map((news, idx) => (
-                        <Col xs={24} md={12} lg={8} key={news.id}>
+                    <Row gutter={[24, 24]}>
+                      {filteredData.map((news) => (
+                        <Col xs={24} sm={12} lg={8} key={news.id}>
                           <Card
                             bordered={false}
                             className="news-card-dark"
                             cover={
                               <div className="image-wrapper">
-                                <img src={news.image} alt={news.title} />
+                                <img src={news.image} alt={news.title} loading="lazy" />
                                 {news.hot && <span className="hot-badge"><FireFilled /> HOT</span>}
                               </div>
                             }
                           >
-                            <Space direction="vertical" size={12}>
-                              <Tag color="#ff6600" style={{ borderRadius: 0, border: 'none', fontWeight: 600 }}>
+                            <div className="card-inner-body">
+                              <Tag className="category-tag">
                                 {categories.find(c => c.key === news.category)?.label.toUpperCase()}
                               </Tag>
-                              <Title level={4} style={{ color: "#fff", margin: 0 }} className="news-title">
+                              <Title level={4} className="news-card-title mt-2">
                                 {news.title}
                               </Title>
-                              <Paragraph style={{ color: "#aaa" }} ellipsis={{ rows: 2 }}>
+                              <Paragraph className="news-desc" ellipsis={{ rows: 2 }}>
                                 {news.desc}
                               </Paragraph>
-                              <div className="d-flex justify-content-between align-items-center mt-2">
-                                <Space>
-                                  <Avatar size="small" icon={<CustomerServiceOutlined />} style={{ backgroundColor: '#333' }} />
-                                  <Text style={{ color: "#666", fontSize: 12 }}>{news.author}</Text>
-                                </Space>
-                                <Text style={{ color: "#666", fontSize: 12 }}>
-                                  <ClockCircleOutlined className="me-1" /> {news.date}
+                              
+                              <div className="meta-footer mt-auto pt-3">
+                                <div className="author-info">
+                                  <Avatar size={24} icon={<CustomerServiceOutlined />} className="author-avatar" />
+                                  <Text className="author-name">{news.author}</Text>
+                                </div>
+                                <Text className="date-text">
+                                  <ClockCircleOutlined /> {news.date}
                                 </Text>
                               </div>
-                              <Button type="link" className="p-0 read-more-btn">
+                              
+                              <Button type="link" className="p-0 read-more-btn mt-3">
                                 ĐỌC TIẾP <ArrowRightOutlined />
                               </Button>
-                            </Space>
+                            </div>
                           </Card>
                         </Col>
                       ))}
@@ -148,35 +152,24 @@ const SoundNews = () => {
                 );
               }
 
-              // Trạng thái Trống (Empty State)
               return (
                 <motion.div
                   key="empty"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="d-flex justify-content-center align-items-center"
-                  style={{ paddingTop: '80px' }}
+                  className="empty-state-container"
                 >
                   <Empty
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
                     description={
-                      <div style={{ color: '#666' }}>
-                        <Title level={4} style={{ color: '#888', marginBottom: 8 }}>
-                          Chưa có bài viết nào
-                        </Title>
-                        <Text style={{ color: '#555' }}>
-                          Nội dung cho chuyên mục này đang được SoundHub biên tập.
-                        </Text>
+                      <div className="empty-text">
+                        <Title level={4} className="empty-title">Chưa có bài viết nào</Title>
+                        <Text className="empty-desc">Nội dung đang được biên tập.</Text>
                       </div>
                     }
                   >
-                    <Button 
-                      type="primary" 
-                      style={{ backgroundColor: '#ff6600', borderColor: '#ff6600', borderRadius: '4px', height: '40px', padding: '0 25px' }}
-                      onClick={() => setActiveTab('all')}
-                    >
-                      XEM CÁC BÀI VIẾT KHÁC
+                    <Button className="btn-back-all" onClick={() => setActiveTab('all')}>
+                      XEM TẤT CẢ
                     </Button>
                   </Empty>
                 </motion.div>
@@ -187,60 +180,126 @@ const SoundNews = () => {
       </div>
 
       <style>{`
-        /* Tổng thể Dark Mode */
+        .news-page-container {
+          background-color: #0f0f0f;
+          color: #fff;
+          padding: 80px 0 40px;
+          min-height: 100vh;
+        }
+
+        .news-content-wrapper {
+          max-width: 1240px;
+          margin: 0 auto;
+          padding: 0 20px;
+        }
+
+        .brand-label {
+          color: #ff6600;
+          font-weight: 600;
+          letter-spacing: 2px;
+          font-size: 12px;
+        }
+
+        .main-news-title {
+          color: #fff !important;
+          margin: 0 !important;
+          font-size: clamp(2rem, 5vw, 3.5rem) !important;
+          font-weight: 800 !important;
+        }
+
         .search-input-dark {
           background: #1a1a1a !important;
           border: 1px solid #333 !important;
-          border-radius: 4px;
-          height: 45px;
+          height: 48px;
+          border-radius: 8px;
         }
-        .search-input-dark input { background: transparent !important; color: #fff !important; }
-        .search-input-dark:hover, .search-input-dark:focus { border-color: #ff6600 !important; }
+        .search-input-dark input { color: #fff !important; }
 
-        /* Tabs Custom */
-        .soundhub-tabs .ant-tabs-tab { color: #888 !important; font-size: 16px; padding: 12px 0 !important; }
-        .soundhub-tabs .ant-tabs-tab-active .ant-tabs-tab-btn { color: #ff6600 !important; font-weight: bold; }
-        .soundhub-tabs .ant-tabs-ink-bar { background: #ff6600 !important; height: 3px !important; }
+        /* Tabs Mobile */
         .soundhub-tabs .ant-tabs-nav::before { border-bottom: 1px solid #222 !important; }
+        .soundhub-tabs .ant-tabs-tab { color: #888 !important; font-size: 15px; }
+        .soundhub-tabs .ant-tabs-tab-active .ant-tabs-tab-btn { color: #ff6600 !important; font-weight: 700; }
+        .soundhub-tabs .ant-tabs-ink-bar { background: #ff6600 !important; }
 
-        /* Card Tin tức */
+        /* News Card */
         .news-card-dark {
           background: #151515 !important;
           border-radius: 12px;
           overflow: hidden;
           transition: all 0.3s ease;
           height: 100%;
+          display: flex;
+          flex-direction: column;
         }
+
         .news-card-dark:hover {
-          transform: translateY(-8px);
+          transform: translateY(-6px);
           background: #1d1d1d !important;
-          box-shadow: 0 15px 35px rgba(0,0,0,0.6) !important;
         }
 
-        .image-wrapper { position: relative; height: 220px; overflow: hidden; }
-        .image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s cubic-bezier(0.33, 1, 0.68, 1); }
-        .news-card-dark:hover .image-wrapper img { transform: scale(1.1); }
+        .image-wrapper { 
+          position: relative; 
+          aspect-ratio: 16/10; 
+          overflow: hidden; 
+        }
+        .image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .news-card-dark:hover .image-wrapper img { transform: scale(1.08); }
 
-        .hot-badge {
-          position: absolute; top: 15px; left: 15px;
-          background: #ff6600; color: #fff;
-          padding: 5px 12px; font-size: 11px; font-weight: bold;
-          border-radius: 4px; z-index: 2;
+        .card-inner-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        
+        .category-tag {
+          background: #ff6600 !important;
+          color: #fff !important;
+          border: none;
+          border-radius: 4px;
+          font-size: 10px;
+          font-weight: 700;
+          width: fit-content;
         }
 
-        .news-title { transition: 0.3s; line-height: 1.4 !important; }
-        .news-card-dark:hover .news-title { color: #ff6600 !important; }
+        .news-card-title {
+          color: #fff !important;
+          margin: 0 !important;
+          font-size: 18px !important;
+          line-height: 1.4 !important;
+          transition: 0.3s;
+        }
+        .news-card-dark:hover .news-card-title { color: #ff6600 !important; }
 
-        .read-more-btn { color: #ff6600 !important; font-weight: bold; font-size: 12px; letter-spacing: 1px; }
-        .read-more-btn:hover { color: #ff8533 !important; }
+        .news-desc { color: #aaa !important; margin: 12px 0 !important; }
 
-        /* Nhuộm tối component Empty của Antd */
-        .ant-empty-img-simple-path { fill: #222 !important; }
-        .ant-empty-img-simple-ellipse { fill: #111 !important; }
-        .ant-empty-img-simple-g { stroke: #333 !important; }
+        .meta-footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-top: 1px solid #222;
+        }
 
-        .mt-4 { margin-top: 1.5rem; }
-        .mb-5 { margin-bottom: 3rem; }
+        .author-info { display: flex; align-items: center; gap: 8px; }
+        .author-avatar { background: #333; }
+        .author-name, .date-text { color: #666 !important; font-size: 12px !important; }
+
+        .read-more-btn { color: #ff6600 !important; font-size: 11px !important; font-weight: 800 !important; letter-spacing: 1px; }
+
+        /* Empty State */
+        .empty-state-container { padding: 100px 0; text-align: center; }
+        .empty-title { color: #888 !important; margin-bottom: 8px !important; }
+        .empty-desc { color: #555 !important; }
+        .btn-back-all {
+          background: #ff6600 !important;
+          border: none !important;
+          color: #fff !important;
+          height: 40px;
+          padding: 0 30px;
+          margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+          .news-page-container { padding: 60px 0 30px; }
+          .main-news-title { margin-bottom: 15px !important; }
+          .card-inner-body { padding: 15px; }
+          .news-card-title { font-size: 16px !important; }
+        }
       `}</style>
     </div>
   );

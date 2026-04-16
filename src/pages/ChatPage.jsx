@@ -74,7 +74,7 @@ const ChatPage = () => {
                     <span className="status-online"></span>
                   </div>
                   <div>
-                    <h6 className="mb-0 fw-bold text-white">SOUNDHUB SUPPORT</h6>
+                    <h6 className="mb-0 fw-bold text-white">TCD Audio SUPPORT</h6>
                     <small className="text-white-50">Sẵn sàng hỗ trợ bạn 24/7</small>
                   </div>
                 </div>
@@ -85,7 +85,14 @@ const ChatPage = () => {
 
               {/* BODY CHAT */}
               <div className="chat-content-area">
-                <CustomerChat userId={user?.id} />
+                <CustomerChat 
+                  userId={user?.id}
+                  onNewMessage={() => {
+                    if (!showChat) {
+                      setUnread(prev => prev + 1);
+                    }
+                  }}
+                />
               </div>
             </Card>
           </motion.div>

@@ -4,7 +4,7 @@ let socket = null;
 
 export function connectOrderSocket(userId) {
     if (!socket) {
-        socket = io("http://localhost:5000", {
+        socket = io(process.env.REACT_APP_WEB_URL, {
         query: { userId },
         transports: ["websocket"]
         });

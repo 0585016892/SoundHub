@@ -5,10 +5,11 @@ import { useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTruck, FaTicketAlt, FaCreditCard, FaChevronLeft, FaShieldAlt } from "react-icons/fa";
 
-const IMAGE_URL = "http://localhost:20032/uploads/products/";
+const IMAGE_URL = `${process.env.REACT_APP_WEB_URL}/uploads/products/`;
 
 const CheckoutPage = () => {
-  const { cart, clearCart } = useCart();
+const { clearCart } = useCart();
+const cart = JSON.parse(localStorage.getItem("checkout_items")) || [];
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -42,7 +43,7 @@ const CheckoutPage = () => {
     
     // Fetch Provinces & Coupons
     fetch("https://provinces.open-api.vn/api/p/").then(res => res.json()).then(setProvinces);
-    fetch("http://localhost:20032/api/coupons").then(res => res.json()).then(setCouponList).catch(() => setCouponList([]));
+    fetch(`${process.env.REACT_APP_API_URL}/coupons`).then(res => res.json()).then(setCouponList).catch(() => setCouponList([]));
   }, []);
 
   // API Địa lý logic (Province -> District -> Ward)
@@ -120,10 +121,8 @@ const submitOrder = async () => {
       note: customer.note || "",
     };
 
-    console.log("🚀 Gửi order:", orderData);
-
     const res = await fetch(
-      "http://localhost:20032/api/orders/add",
+      `${process.env.REACT_APP_API_URL}/orders/add`,
       {
         method: "POST",
         headers: {
@@ -139,13 +138,13 @@ const submitOrder = async () => {
       throw new Error(data.message);
     }
 
-    Swal.fire({
-      icon: "success",
-      title: "Đặt hàng thành công 🎉",
-      text: "Đơn hàng đang được xử lý",
-      timer: 2000,
-      showConfirmButton: false,
-    });
+    // Swal.fire({
+    //   icon: "success",
+    //   title: "Đặt hàng thành công 🎉",
+    //   text: "Đơn hàng đang được xử lý",
+    //   timer: 2000,
+    //   showConfirmButton: false,
+    // });
 
     clearCart();
 
@@ -183,7 +182,7 @@ const submitOrder = async () => {
       </AnimatePresence>
 
       <div className="container mt-4">
-        <Link to="/cart" className="text-decoration-none text-secondary small d-flex align-items-center mb-4">
+        <Link to="/gio-hang" className="text-decoration-none text-secondary small d-flex align-items-center mb-4">
           <FaChevronLeft className="me-2" /> QUAY LẠI GIỎ HÀNG
         </Link>
 
@@ -234,7 +233,7 @@ const submitOrder = async () => {
                 </div>
                 <div className="col-12">
                   <div className="floating-input">
-                    <input name="address" placeholder="Số nhà, tên đường..." value={customer.address} onChange={handleChange} />
+                    <input name="address" placeholder="Số nhà, tên đường..." onChange={handleChange} />
                   </div>
                 </div>
                 <div className="col-12">
