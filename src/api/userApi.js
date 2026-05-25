@@ -4,12 +4,18 @@ import axios from "axios";
 const API_URL = `${process.env.REACT_APP_API_URL}`; // thay bằng URL backend của bạn
 
 // --- Login ---
-export const  loginApi = async ({ email, password }) => {
+export const loginApi = async ({ email, password }) => {
   try {
-    const res = await axios.post(`${API_URL}/auth/customer/login`, { email, password });
+    const res = await axios.post(`${API_URL}/auth/customer/login`, {
+      email,
+      password,
+    });
     return { success: true, user: res.data.user, token: res.data.token };
   } catch (err) {
-    return { success: false, message: err.response?.data?.message || "Lỗi server" };
+    return {
+      success: false,
+      message: err.response?.data?.message || "Lỗi server",
+    };
   }
 };
 
@@ -19,7 +25,10 @@ export const registerApi = async (data) => {
     const res = await axios.post(`${API_URL}/auth/customer/register`, data);
     return { success: true, user: res.data.user };
   } catch (err) {
-    return { success: false, message: err.response?.data?.message || "Lỗi server" };
+    return {
+      success: false,
+      message: err.response?.data?.message || "Lỗi server",
+    };
   }
 };
 
@@ -30,7 +39,7 @@ export const getProfile = async (token) => {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log(res);
-    
+
     return res.data;
   } catch (err) {
     console.error(err);
@@ -41,16 +50,12 @@ export const getProfile = async (token) => {
 // --- Update profile ---
 export const updateProfile = async (token, data) => {
   try {
-    const res = await axios.put(
-      `${API_URL}/auth/customer/profile`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const res = await axios.put(`${API_URL}/auth/customer/profile`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     // Lưu user mới vào localStorage (giống Tiki)
     if (res.data?.user) {
@@ -70,7 +75,6 @@ export const updateProfile = async (token, data) => {
   }
 };
 
-
 // --- Change password ---
 export const changePassword = async (token, data) => {
   try {
@@ -79,7 +83,10 @@ export const changePassword = async (token, data) => {
     });
     return { success: true, message: res.data.message };
   } catch (err) {
-    return { success: false, message: err.response?.data?.message || "Lỗi server" };
+    return {
+      success: false,
+      message: err.response?.data?.message || "Lỗi server",
+    };
   }
 };
 
@@ -100,4 +107,8 @@ export const getUserOrders = async (userId) => {
     console.error("Lỗi lấy đơn hàng:", error);
     return [];
   }
+};
+export const updateOrderStatus = async (id, data) => {
+  const res = await axios.put(`${API_URL}/orders/${id}/status`, data);
+  return res.data;
 };
