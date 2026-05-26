@@ -111,6 +111,16 @@ const ProfilePage = () => {
     );
   };
   // viết hàm hủy ở đây
+  const huyDonHang = (orderId) => {
+    try {
+      updateOrderStatus(orderId, { order_status: "cancelled" });
+      message.success("Đã hủy đơn hàng");
+      loadOrders();
+    } catch {
+      message.error("Hủy thất bại");
+    }
+  };
+
   return (
     <div className="profile-wrapper py-3 py-md-5 mt-5">
       <div className="container">
@@ -231,6 +241,16 @@ const ProfilePage = () => {
                         <div className="order-header d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                           <span className="order-id">#DH{o.id}</span>
                           {getStatusTag(o.order_status)}
+                          {o.order_status === "pending" && (
+                            // Cho phép hủy đơn nếu đang ở trạng thái "pending"
+                            <Button
+                              size="small"
+                              danger
+                              onClick={() => huyDonHang(o.id)}
+                            >
+                              Hủy
+                            </Button>
+                          )}
                         </div>
                         {o.items.map((item) => (
                           <div
