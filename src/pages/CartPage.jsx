@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import {
   Button,
@@ -15,12 +15,12 @@ import {
   Divider,
 } from "antd";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ShoppingCartOutlined, 
-  DeleteOutlined, 
-  ArrowLeftOutlined, 
+import {
+  ShoppingCartOutlined,
+  DeleteOutlined,
+  ArrowLeftOutlined,
   SafetyCertificateOutlined,
-  TruckOutlined 
+  TruckOutlined,
 } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
@@ -30,18 +30,15 @@ const CartPage = () => {
   const navigate = useNavigate();
   const { cart, updateQty, removeFromCart } = useCart();
   const [selectedItems, setSelectedItems] = useState([]);
-const selectedCartItems = cart.filter(item =>
-  selectedItems.includes(item.variant_id)
-);
-  const total = selectedCartItems.reduce(
-    (s, i) => s + i.price * i.quantity,
-    0
+  const selectedCartItems = cart.filter((item) =>
+    selectedItems.includes(item.variant_id),
   );
+  const total = selectedCartItems.reduce((s, i) => s + i.price * i.quantity, 0);
   const isAllSelected = cart.length > 0 && selectedItems.length === cart.length;
 
   const toggleSelect = (id) => {
     setSelectedItems((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
   };
 
@@ -67,7 +64,7 @@ const selectedCartItems = cart.filter(item =>
   };
 
   // UI KHI GIỎ TRỐNG
-// EMPTY CART UI - PHIÊN BẢN LUXURY DARK
+  // EMPTY CART UI - PHIÊN BẢN LUXURY DARK
   if (!cart.length)
     return (
       <div className="cart-empty-luxury">
@@ -85,7 +82,8 @@ const selectedCartItems = cart.filter(item =>
 
           <h2 className="empty-title">ÂM THANH ĐANG CHỜ ĐỢI...</h2>
           <p className="empty-subtitle">
-            Giỏ hàng của bạn hiện đang trống. Đừng bỏ lỡ những giai điệu tuyệt vời đang chờ bạn khám phá.
+            Giỏ hàng của bạn hiện đang trống. Đừng bỏ lỡ những giai điệu tuyệt
+            vời đang chờ bạn khám phá.
           </p>
 
           <Link to="/san-pham">
@@ -139,9 +137,17 @@ const selectedCartItems = cart.filter(item =>
           }
 
           @keyframes pulse {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { opacity: 0.5; }
-            100% { transform: scale(1.5); opacity: 0; }
+            0% {
+              transform: scale(0.5);
+              opacity: 0;
+            }
+            50% {
+              opacity: 0.5;
+            }
+            100% {
+              transform: scale(1.5);
+              opacity: 0;
+            }
           }
 
           .empty-title {
@@ -173,13 +179,23 @@ const selectedCartItems = cart.filter(item =>
             transition: 0.4s;
           }
 
-          .btn-text { position: relative; z-index: 2; }
+          .btn-text {
+            position: relative;
+            z-index: 2;
+          }
 
           .btn-glow {
             position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,102,0,0.4), transparent);
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+              90deg,
+              transparent,
+              rgba(255, 102, 0, 0.4),
+              transparent
+            );
             transition: 0.5s;
           }
 
@@ -199,24 +215,26 @@ const selectedCartItems = cart.filter(item =>
     <div className="cart-page-wrapper mt-5">
       <Container fluid="xl" className="py-5">
         <div className="d-flex align-items-center mb-5 gap-3">
-            <Link to="/san-pham" className="back-link">
-                <ArrowLeftOutlined /> Tiếp tục mua sắm
-            </Link>
-            <h1 className="cart-title mb-0">GIỎ HÀNG <span className="accent">({cart.length})</span></h1>
+          <Link to="/san-pham" className="back-link">
+            <ArrowLeftOutlined /> Tiếp tục mua sắm
+          </Link>
+          <h1 className="cart-title mb-0">
+            GIỎ HÀNG <span className="accent">({cart.length})</span>
+          </h1>
         </div>
 
         <Row gutter={[32, 32]}>
           {/* PHẦN DANH SÁCH SẢN PHẨM */}
           <Col lg={16}>
             <div className="cart-list-header d-flex justify-content-between align-items-center p-3">
-                <Checkbox 
-                    className="custom-checkbox"
-                    checked={isAllSelected}
-                    onChange={(e) => toggleSelectAll(e.target.checked)}
-                >
-                    <span className="text-white fw-bold">CHỌN TẤT CẢ</span>
-                </Checkbox>
-                <Text className="text-secondary small">Giá sản phẩm</Text>
+              <Checkbox
+                className="custom-checkbox"
+                checked={isAllSelected}
+                onChange={(e) => toggleSelectAll(e.target.checked)}
+              >
+                <span className="text-white fw-bold">CHỌN TẤT CẢ</span>
+              </Checkbox>
+              <Text className="text-secondary small">Giá sản phẩm</Text>
             </div>
 
             <AnimatePresence>
@@ -230,40 +248,66 @@ const selectedCartItems = cart.filter(item =>
                   className="cart-item-card mb-3"
                 >
                   <div className="d-flex align-items-center gap-3 p-3">
-                    <Checkbox 
-                        className="custom-checkbox"
-                        checked={selectedItems.includes(item.variant_id)}
-                        onChange={() => toggleSelect(item.variant_id)}
+                    <Checkbox
+                      className="custom-checkbox"
+                      checked={selectedItems.includes(item.variant_id)}
+                      onChange={() => toggleSelect(item.variant_id)}
                     />
-                    
+
                     <div className="item-image-wrapper">
-                        <Image
-                            src={IMAGE_URL + item.image}
-                            preview={false}
-                            className="rounded-3"
-                        />
+                      <Image
+                        src={IMAGE_URL + item.image}
+                        preview={false}
+                        className="rounded-3"
+                      />
                     </div>
 
                     <div className="item-info flex-grow-1">
-                        <h5 className="text-white mb-1">{item.product_name}</h5>
-                        <Text className="text-dim small d-block mb-2">
-                            Màu sắc: {item.color} | Công suất: {item.power}
-                        </Text>
-                        <div className="qty-control mt-3">
-                            <button className="qty-btn" onClick={() => updateQty(item.variant_id, item.product_id, item.quantity - 1)}>-</button>
-                            <span className="qty-value">{item.quantity}</span>
-                            <button className="qty-btn" onClick={() => updateQty(item.variant_id, item.product_id, item.quantity + 1)}>+</button>
-                        </div>
+                      <h5 className="text-white mb-1">{item.product_name}</h5>
+                      <Text className="text-dim small d-block mb-2">
+                        Màu sắc: {item.color} | Công suất: {item.power}
+                      </Text>
+                      <div className="qty-control mt-3">
+                        <button
+                          className="qty-btn"
+                          onClick={() =>
+                            updateQty(
+                              item.variant_id,
+                              item.product_id,
+                              item.quantity - 1,
+                            )
+                          }
+                        >
+                          -
+                        </button>
+                        <span className="qty-value">{item.quantity}</span>
+                        <button
+                          className="qty-btn"
+                          onClick={() =>
+                            updateQty(
+                              item.variant_id,
+                              item.product_id,
+                              item.quantity + 1,
+                            )
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
 
                     <div className="item-price-area text-end">
-                        <div className="price-tag mb-4">{item.price.toLocaleString()} đ</div>
-                        <Button 
-                            type="text" 
-                            className="delete-btn" 
-                            icon={<DeleteOutlined />} 
-                            onClick={() => handleRemove(item.variant_id, item.product_id)}
-                        />
+                      <div className="price-tag mb-4">
+                        {item.price.toLocaleString()} đ
+                      </div>
+                      <Button
+                        type="text"
+                        className="delete-btn"
+                        icon={<DeleteOutlined />}
+                        onClick={() =>
+                          handleRemove(item.variant_id, item.product_id)
+                        }
+                      />
                     </div>
                   </div>
                 </motion.div>
@@ -274,54 +318,81 @@ const selectedCartItems = cart.filter(item =>
           {/* PHẦN THANH TOÁN */}
           <Col lg={8}>
             <div className="order-summary-card p-4">
-                <Title level={4} className="text-white mb-4">TÓM TẮT ĐƠN HÀNG</Title>
-                
-                <div className="summary-row">
-                    <span>Tạm tính</span>
-                    <span>{total.toLocaleString()} đ</span>
+              <Title level={4} className="text-white mb-4">
+                TÓM TẮT ĐƠN HÀNG
+              </Title>
+
+              <div className="summary-row">
+                <span>Tạm tính</span>
+                <span>{total.toLocaleString()} đ</span>
+              </div>
+
+              <div className="summary-row">
+                <span>Vận chuyển</span>
+                <span
+                  className={total >= 500000 ? "text-success" : "text-white"}
+                >
+                  {total >= 500000 ? "MIỄN PHÍ" : "30,000 đ"}
+                </span>
+              </div>
+
+              <Divider className="bg-secondary opacity-25" />
+
+              <div className="summary-row total">
+                <span>TỔNG CỘNG</span>
+                <span className="accent fs-4 fw-black">
+                  {(total >= 500000 ? total : total + 30000).toLocaleString()} đ
+                </span>
+              </div>
+              <Button
+                className="btn-checkout w-100 mt-4"
+                size="large"
+                disabled={selectedItems.length === 0}
+                onClick={() => {
+                  if (selectedItems.length === 0) {
+                    Swal.fire("Vui lòng chọn sản phẩm để thanh toán");
+                    return;
+                  }
+
+                  // CHECK SỐ LƯỢNG TỒN KHO
+                  const invalidItem = selectedCartItems.find(
+                    (item) => item.quantity > item.stock,
+                    // hoặc item.quantity_stock
+                  );
+
+                  if (invalidItem) {
+                    Swal.fire({
+                      icon: "error",
+                      title: "Số lượng vượt quá tồn kho",
+                      text: `${invalidItem.product_name} chỉ còn ${invalidItem.stock} sản phẩm`,
+                      background: "#1a1a1a",
+                      color: "#fff",
+                      confirmButtonColor: "#ff6600",
+                    });
+
+                    return;
+                  }
+
+                  localStorage.setItem(
+                    "checkout_items",
+                    JSON.stringify(selectedCartItems),
+                  );
+
+                  navigate("/checkout");
+                }}
+              >
+                TIẾN HÀNH THANH TOÁN
+              </Button>
+              <div className="cart-features mt-4">
+                <div className="feature-item">
+                  <TruckOutlined className="accent" /> Giao hàng nhanh 2H (Nội
+                  thành)
                 </div>
-
-                <div className="summary-row">
-                    <span>Vận chuyển</span>
-                    <span className={total >= 500000 ? "text-success" : "text-white"}>
-                        {total >= 500000 ? "MIỄN PHÍ" : "30,000 đ"}
-                    </span>
+                <div className="feature-item">
+                  <SafetyCertificateOutlined className="accent" /> Bảo hành 12
+                  tháng chính hãng
                 </div>
-
-                <Divider className="bg-secondary opacity-25" />
-
-                <div className="summary-row total">
-                    <span>TỔNG CỘNG</span>
-                    <span className="accent fs-4 fw-black">
-                        {(total >= 500000 ? total : total + 30000).toLocaleString()} đ
-                    </span>
-                </div>
-
-                    <Button
-                      className="btn-checkout w-100 mt-4"
-                      size="large"
-                      disabled={selectedItems.length === 0}
-                   onClick={() => {
-                        if (selectedItems.length === 0) {
-                          Swal.fire("Vui lòng chọn sản phẩm để thanh toán");
-                          return;
-                        }
-
-                        localStorage.setItem(
-                          "checkout_items",
-                          JSON.stringify(selectedCartItems)
-                        );
-
-                        navigate("/checkout");
-                      }}
-                    >
-                      TIẾN HÀNH THANH TOÁN
-                    </Button>
-
-                <div className="cart-features mt-4">
-                    <div className="feature-item"><TruckOutlined className="accent" /> Giao hàng nhanh 2H (Nội thành)</div>
-                    <div className="feature-item"><SafetyCertificateOutlined className="accent" /> Bảo hành 12 tháng chính hãng</div>
-                </div>
+              </div>
             </div>
           </Col>
         </Row>
@@ -414,7 +485,9 @@ const selectedCartItems = cart.filter(item =>
 
 // Container helper
 const Container = ({ children, className, fluid }) => (
-  <div className={`container${fluid ? "-fluid" : ""} ${className}`}>{children}</div>
+  <div className={`container${fluid ? "-fluid" : ""} ${className}`}>
+    {children}
+  </div>
 );
 
 export default CartPage;
